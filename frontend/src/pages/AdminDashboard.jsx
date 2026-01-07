@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import GalleryTab from "../components/GalleryTab";
 
 export default function AdminDashboard({ admin, setAdmin }) {
   const [tab, setTab] = useState("products"); // 'products' or 'gallery'
@@ -11,13 +12,6 @@ export default function AdminDashboard({ admin, setAdmin }) {
   const [imageFile, setImageFile] = useState(null); // for file upload
   const [editId, setEditId] = useState(null);
 
-  // Gallery (static)
-  const galleryImages = [
-    "/images/gallery1.jpg",
-    "/images/gallery2.jpg",
-    "/images/gallery3.jpg",
-    "/images/gallery4.jpg",
-  ];
 
   // Fetch products
   const fetchProducts = async () => {
@@ -198,16 +192,8 @@ export default function AdminDashboard({ admin, setAdmin }) {
         </>
       )}
 
-      {/* Gallery Tab */}
-      {tab === "gallery" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {galleryImages.map((img, idx) => (
-            <div key={idx} className="bg-white p-2 rounded shadow">
-              <img src={img} alt={`Gallery ${idx}`} className="w-full h-40 object-cover rounded" />
-            </div>
-          ))}
-        </div>
-      )}
+{tab === "gallery" && <GalleryTab />}
+
     </div>
   );
 }

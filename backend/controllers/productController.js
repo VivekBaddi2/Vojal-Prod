@@ -54,11 +54,19 @@ export const updateProduct = asyncHandler(async (req, res) => {
 
 // Delete product
 export const deleteProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const { id } = req.params;
+
+  const product = await Product.findById(id);
+
   if (!product) {
     res.status(404);
     throw new Error("Product not found");
   }
-  await product.remove();
-  res.json({ message: "Product removed" });
+
+  await Product.findByIdAndDelete(id);
+
+  res.status(200).json({
+    success: true,
+    message: "Product removed successfully",
+  });
 });
