@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import heroImg from "../assets/hero.jpg";
-import Footer from "../components/Footer";
+
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -258,8 +258,7 @@ export default function Home() {
     animation: marquee var(--carousel-speed) linear infinite;
   }
 `}</style>
-{/* ================= FOOTER ================= */}
-    <Footer />
+
     </>
 
     
