@@ -1,9 +1,13 @@
+// backend/controllers/productController.js
 import asyncHandler from "express-async-handler";
 import Product from "../schemas/productSchema.js";
 
 // Get all products
 export const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
+  const category = req.query.category; // optional filter
+  const products = category
+    ? await Product.find({ category }).sort({ createdAt: -1 })
+    : await Product.find().sort({ createdAt: -1 });
   res.json(products);
 });
 
@@ -19,22 +23,22 @@ export const getProductById = asyncHandler(async (req, res) => {
 
 // Create product
 export const createProduct = asyncHandler(async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, category } = req.body;
   const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-  if (!title || !description || !image) {
+  if (!title || !description || !image || !category) {
     res.status(400);
-    throw new Error("Title, description, and image are required");
+    throw new Error("Title, description, image, and category are required");
   }
 
-  const product = new Product({ title, description, image });
+  const product = new Product({ title, description, image, category });
   const createdProduct = await product.save();
   res.status(201).json(createdProduct);
 });
 
 // Update product
 export const updateProduct = asyncHandler(async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, category } = req.body;
   const product = await Product.findById(req.params.id);
 
   if (!product) {
@@ -42,11 +46,10 @@ export const updateProduct = asyncHandler(async (req, res) => {
     throw new Error("Product not found");
   }
 
-  if (req.file) {
-    product.image = `/uploads/${req.file.filename}`;
-  }
-  product.title = title || product.title;
-  product.description = description || product.description;
+  if (req.file) product.image = `/uploads/${req.file.filename}`;
+  if (title) product.title = title;
+  if (description) product.description = description;
+  if (category) product.category = category;
 
   const updatedProduct = await product.save();
   res.json(updatedProduct);
@@ -54,19 +57,13 @@ export const updateProduct = asyncHandler(async (req, res) => {
 
 // Delete product
 export const deleteProduct = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  const product = await Product.findById(id);
+  const product = await Product.findById(req.params.id);
 
   if (!product) {
     res.status(404);
     throw new Error("Product not found");
   }
 
-  await Product.findByIdAndDelete(id);
-
-  res.status(200).json({
-    success: true,
-    message: "Product removed successfully",
-  });
+  await Product.findByIdAndDelete(req.params.id);
+  res.status(200).json({ success: true, message: "Product removed successfully" });
 });

@@ -9,9 +9,9 @@ export default function AdminDashboard({ admin, setAdmin }) {
   const [products, setProducts] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState(""); // NEW
   const [imageFile, setImageFile] = useState(null); // for file upload
   const [editId, setEditId] = useState(null);
-
 
   // Fetch products
   const fetchProducts = async () => {
@@ -35,12 +35,13 @@ export default function AdminDashboard({ admin, setAdmin }) {
   // Product CRUD
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !description || (!imageFile && !editId)) return;
+    if (!title || !description || !category || (!imageFile && !editId)) return;
 
     try {
       const formData = new FormData();
       formData.append("title", title);
       formData.append("description", description);
+      formData.append("category", category); // NEW
       if (imageFile) formData.append("image", imageFile);
 
       if (editId) {
@@ -54,8 +55,10 @@ export default function AdminDashboard({ admin, setAdmin }) {
         });
       }
 
+      // reset form
       setTitle("");
       setDescription("");
+      setCategory(""); // reset
       setImageFile(null);
       fetchProducts();
     } catch (err) {
@@ -67,6 +70,7 @@ export default function AdminDashboard({ admin, setAdmin }) {
     setEditId(p._id);
     setTitle(p.title);
     setDescription(p.description);
+    setCategory(p.category); // NEW
     setImageFile(null); // user can choose to upload new image
   };
 
@@ -134,13 +138,23 @@ export default function AdminDashboard({ admin, setAdmin }) {
               required
             />
             <input
+              type="text"
+              placeholder="Category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="border p-2 rounded"
+              required
+            />
+            <input
               type="file"
               accept="image/*"
               onChange={(e) => setImageFile(e.target.files[0])}
               className="border p-2 rounded"
             />
             {editId && !imageFile && (
-              <p className="text-gray-500 text-sm">Current image will remain if you don't upload a new one.</p>
+              <p className="text-gray-500 text-sm">
+                Current image will remain if you don't upload a new one.
+              </p>
             )}
             <button className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800 transition">
               {editId ? "Update" : "Create"}
@@ -154,6 +168,7 @@ export default function AdminDashboard({ admin, setAdmin }) {
                 <tr className="border-b">
                   <th className="p-2">Title</th>
                   <th className="p-2">Description</th>
+                  <th className="p-2">Category</th>
                   <th className="p-2">Image</th>
                   <th className="p-2">Actions</th>
                 </tr>
@@ -163,6 +178,7 @@ export default function AdminDashboard({ admin, setAdmin }) {
                   <tr key={p._id} className="border-b hover:bg-gray-50">
                     <td className="p-2">{p.title}</td>
                     <td className="p-2">{p.description}</td>
+                    <td className="p-2">{p.category}</td> {/* NEW */}
                     <td className="p-2">
                       <img
                         src={`http://localhost:4000${p.image}`}
@@ -192,8 +208,7 @@ export default function AdminDashboard({ admin, setAdmin }) {
         </>
       )}
 
-{tab === "gallery" && <GalleryTab />}
-
+      {tab === "gallery" && <GalleryTab />}
     </div>
   );
 }

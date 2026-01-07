@@ -1,3 +1,4 @@
+// frontend/pages/Products.jsx
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
@@ -8,26 +9,45 @@ const fadeUp = { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } };
 
 export default function Products() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  // Fetch products from backend
-  const fetchProducts = async () => {
+  const API_BASE = "http://localhost:4000/api/product";
+
+  // Fetch products
+  const fetchProducts = async (category = "") => {
     try {
-      const { data } = await axios.get("http://localhost:4000/api/product");
+      const url = category && category !== "All" ? `${API_BASE}?category=${category}` : API_BASE;
+      const { data } = await axios.get(url);
       setProducts(data);
     } catch (err) {
       console.error("Error fetching products:", err);
-      setProducts([]); // fallback to empty
+      setProducts([]);
+    }
+  };
+
+  // Fetch categories from products
+  const fetchCategories = async () => {
+    try {
+      const { data } = await axios.get(API_BASE);
+      const uniqueCategories = ["All", ...new Set(data.map((p) => p.category))];
+      setCategories(uniqueCategories);
+    } catch (err) {
+      console.error("Error fetching categories:", err);
     }
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchCategories();
   }, []);
+
+  useEffect(() => {
+    fetchProducts(selectedCategory);
+  }, [selectedCategory]);
 
   return (
     <>
       <Navbar />
-
       <div className="space-y-20 overflow-hidden">
         {/* HERO */}
         <section
@@ -45,6 +65,31 @@ export default function Products() {
             <p className="text-lg md:text-xl opacity-90">Premium Water Taps & Plumbing Accessories</p>
           </motion.div>
         </section>
+
+        {/* CATEGORY FILTER */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="max-w-6xl mx-auto px-6"
+        >
+          <div className="flex gap-4 overflow-x-auto py-4">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                className={`px-4 py-2 rounded-full border transition ${
+                  selectedCategory === cat
+                    ? "bg-blue-900 text-white"
+                    : "bg-white text-blue-900"
+                }`}
+                onClick={() => setSelectedCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </motion.div>
 
         {/* PRODUCTS GRID */}
         <motion.section
@@ -75,6 +120,7 @@ export default function Products() {
                   <div className="p-4 space-y-2 text-center">
                     <h3 className="font-bold text-lg text-blue-900">{p.title}</h3>
                     <p className="text-gray-700">{p.description}</p>
+                    <p className="text-sm text-gray-500">{p.category}</p>
                   </div>
                 </motion.div>
               ))}
