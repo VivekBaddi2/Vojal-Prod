@@ -4,6 +4,7 @@ import cors from "cors";
 import mongooseConnection from "./mongo.js";
 import appRoutes from "./routes/index.js";
 import dotenv from "dotenv";
+import path from "path";
 
 
 dotenv.config();
@@ -41,3 +42,6 @@ app.use("/api", appRoutes);
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+// Serve uploads folder
+app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
