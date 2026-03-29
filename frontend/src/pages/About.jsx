@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import heroImg from "../assets/hero.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } };
@@ -8,102 +9,84 @@ const fadeUp = { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } };
 export default function About() {
   return (
     <>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap');`}</style>
       <Navbar />
+      <div className="pt-16" style={{ fontFamily: "'DM Sans', sans-serif" }}>
 
-      <div className="space-y-24 overflow-hidden">
-      {/* HERO */}
-<section
-  className="relative text-white py-16 md:py-20 px-6 bg-cover bg-center"
-  style={{ backgroundImage: `url(${heroImg})` }}
->
-  <div className="absolute inset-0 bg-black/40"></div>
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8 }}
-    className="relative max-w-6xl mx-auto text-center space-y-4"
-  >
-    <h1 className="text-4xl md:text-5xl font-bold tracking-wide">About Flowtec</h1>
-    <p className="text-lg md:text-xl opacity-90">
-      Premium Water Taps & Plumbing Accessories Trusted Worldwide
-    </p>
-    <div className="pt-4">
-      <Link
-        to="/contact"
-        className="inline-block bg-blue-900 text-white px-6 py-3 rounded-lg font-semibold hover:scale-105 transition"
-      >
-        Get in Touch
-      </Link>
-    </div>
-  </motion.div>
-</section>
-
-        {/* OUR STORY */}
-        <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-center">
-          {/* Left Text */}
-          <div className="space-y-6">
-            <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-3xl md:text-4xl font-bold text-blue-900">
-              Our Story
-            </motion.h2>
-            <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }} className="text-gray-700 leading-relaxed">
-              Flowtec started with a vision to deliver modern, high-quality plumbing solutions for homes and businesses. We specialize in water taps, shower heads, and accessories that combine style, durability, and performance.
-            </motion.p>
-            <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.35, duration: 0.5 }} className="text-gray-700 leading-relaxed">
-              Our international clients trust us for innovative designs, sustainable manufacturing, and reliable products that meet global standards.
-            </motion.p>
-          </div>
-
-          {/* Core Values Card */}
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} whileHover={{ scale: 1.03 }} className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-semibold text-blue-900 mb-4">Core Values</h3>
-            <ul className="space-y-4 font-medium text-gray-800">
-              {[
-                "Premium-grade materials & finishes",
-                "Manufactured to international standards",
-                "Trusted by global distributors & clients",
-                "Reliable solutions for modern plumbing",
-              ].map((text, i) => (
-                <motion.li key={i} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i*0.15 }} className="flex items-start gap-3">
-                  <span className="text-blue-900 text-lg">✔</span>
-                  <span>{text}</span>
-                </motion.li>
-              ))}
-            </ul>
+        {/* HERO */}
+        <section className="relative min-h-[55vh] flex items-center justify-center text-white bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroImg})` }}>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#3a0f45]/80 via-[#3a0f45]/60 to-[#C9A84C]/20" />
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
+            className="relative text-center space-y-4 px-6">
+            <p className="text-[#C9A84C] text-xs tracking-[0.2em] uppercase font-medium">About Vojal Engineering</p>
+            <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-4xl md:text-5xl font-bold">
+              Premium Water Taps &<br />Plumbing Accessories
+            </h1>
+            <div className="w-12 h-0.5 bg-[#C9A84C] mx-auto" />
+            <p className="text-white/75 text-sm max-w-md mx-auto leading-relaxed">
+              Trusted worldwide for innovative design, sustainable manufacturing, and lasting performance.
+            </p>
+            <Link to="/contact" className="inline-block bg-[#7B1F8A] text-white px-6 py-3 rounded-lg text-sm font-medium border-2 border-[#7B1F8A] hover:bg-[#5c1a6e] transition-colors mt-2">
+              Get in Touch
+            </Link>
           </motion.div>
+        </section>
+
+        {/* STORY */}
+        <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+          className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-16 items-center">
+          <div className="space-y-5">
+            <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-3xl font-semibold text-[#3a0f45]">
+              Our Story
+              <div className="w-9 h-0.5 bg-[#C9A84C] mt-2 rounded" />
+            </h2>
+            <p className="text-gray-500 text-sm leading-relaxed">
+              Vojal started with a vision to deliver modern, high-quality plumbing solutions for homes and businesses. We specialize in water taps, shower heads, and accessories that combine style, durability, and performance.
+            </p>
+            <p className="text-gray-500 text-sm leading-relaxed">
+              Our international clients trust us for innovative designs, sustainable manufacturing, and reliable products that meet global standards — built for decades of use.
+            </p>
+          </div>
+          <div className="bg-[#faf7fc] border border-[#ede0f7] border-l-4 border-l-[#C9A84C] rounded-2xl p-8">
+            <h3 style={{ fontFamily: "'Playfair Display', serif" }} className="text-xl font-semibold text-[#7B1F8A] mb-6">Core Values</h3>
+            {["Premium-grade materials & finishes", "Manufactured to international standards", "Trusted by global distributors & clients", "Reliable solutions for modern plumbing"].map((v, i) => (
+              <div key={i} className="flex items-start gap-3 mb-4">
+                <div className="w-5 h-5 rounded-full bg-[#7B1F8A] flex items-center justify-center text-white text-[10px] flex-shrink-0 mt-0.5">✓</div>
+                <span className="text-sm text-[#3a0f45] leading-relaxed">{v}</span>
+              </div>
+            ))}
+          </div>
         </motion.section>
 
-        {/* WHY CHOOSE US */}
-        <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="bg-gray-50 py-16">
-          <div className="max-w-6xl mx-auto px-6 space-y-10 text-center">
-            <h2 className="text-3xl font-bold text-blue-900">Why Choose Flowtec?</h2>
-            <p className="text-gray-700 max-w-2xl mx-auto leading-relaxed">
-              Our products are trusted globally for quality, design, and reliability. We focus on modern aesthetics, sustainable production, and long-lasting performance.
+        {/* WHY CHOOSE */}
+        <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+          className="bg-[#faf7fc] border-t border-b border-[#f0eadb] py-16">
+          <div className="max-w-6xl mx-auto px-6 text-center">
+            <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-3xl font-semibold text-[#3a0f45] mb-3">Why Choose Vojal?</h2>
+            <div className="w-9 h-0.5 bg-[#C9A84C] mx-auto mb-4 rounded" />
+            <p className="text-gray-500 text-sm max-w-md mx-auto mb-12 leading-relaxed">
+              Trusted globally for quality, design, and reliability — focused on modern aesthetics and sustainable production.
             </p>
-
-            <div className="grid md:grid-cols-3 gap-6 mt-6">
+            <div className="grid md:grid-cols-3 gap-6">
               {[
-                { title: "Global Trust", desc: "Used and trusted by international clients." },
-                { title: "Durable Quality", desc: "Premium materials that last for decades." },
-                { title: "Innovative Design", desc: "Modern, sleek, and functional designs." },
-              ].map((item, i) => (
-                <motion.div key={i} whileHover={{ scale: 1.05 }} className="bg-white p-6 rounded-xl shadow text-center">
-                  <h4 className="text-xl font-semibold text-blue-900 mb-2">{item.title}</h4>
-                  <p className="text-gray-700">{item.desc}</p>
-                </motion.div>
+                { icon: "🌐", title: "Global Trust", desc: "Used and trusted by international clients and distributors across 12+ countries." },
+                { icon: "🏆", title: "Durable Quality", desc: "Premium brass and chrome materials engineered to last for decades." },
+                { icon: "✨", title: "Innovative Design", desc: "Modern, sleek, and functional designs that elevate every space." },
+              ].map((c, i) => (
+                <div key={i} className="bg-white rounded-xl border border-[#f0eadb] border-b-4 border-b-[#C9A84C] p-7 hover:shadow-lg transition-shadow">
+                  <div className="text-3xl mb-4">{c.icon}</div>
+                  <h4 style={{ fontFamily: "'Playfair Display', serif" }} className="text-lg font-semibold text-[#7B1F8A] mb-2">{c.title}</h4>
+                  <p className="text-gray-500 text-sm leading-relaxed">{c.desc}</p>
+                </div>
               ))}
             </div>
           </div>
         </motion.section>
 
-        {/* CTA */}
-        <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center py-16">
-          <h2 className="text-3xl font-bold text-blue-900 mb-4">Ready to work with Flowtec?</h2>
-          <p className="text-gray-700 mb-6">Contact us today to discuss your project and explore our premium plumbing solutions.</p>
-          <motion.a href="/contact" whileHover={{ scale: 1.05 }} className="inline-block bg-blue-900 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
-            Get in Touch
-          </motion.a>
-        </motion.section>
+
       </div>
+      <Footer />
     </>
   );
 }

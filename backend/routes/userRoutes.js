@@ -2,30 +2,30 @@ import express from "express";
 import {
   createAdmin,
   adminLogin,
+  adminLogout,
   updateAdmin,
   deleteAdmin,
   getAdminById,
-  getAllAdmins
+  getAllAdmins,
 } from "../controllers/userController.js";
+import protect from "../middlewares/authMiddleware.js";
 
 const adminRouter = express.Router();
 
-// Create a new admin
-adminRouter.route("/create").post(createAdmin);
+// ── Public ──
+adminRouter.post("/login", adminLogin);
 
-// Admin login
-adminRouter.route("/login").post(adminLogin);
+// ── Verify session (used by App.jsx on load) ──
+adminRouter.get("/verify", protect, (req, res) => {
+  res.json({ email: req.admin.email });
+});
 
-// Update an admin by ID
-adminRouter.route("/update/:id").put(updateAdmin);
-
-// Delete an admin by ID
-adminRouter.route("/delete/:id").delete(deleteAdmin);
-
-// Get admin by ID
-adminRouter.route("/:id").get(getAdminById);
-
-// Get all admins
-adminRouter.route("/").get(getAllAdmins);
+// ── Auth required ──
+adminRouter.post("/logout", protect, adminLogout);
+adminRouter.post("/create", protect, createAdmin);
+adminRouter.put("/update/:id", protect, updateAdmin);
+adminRouter.delete("/delete/:id", protect, deleteAdmin);
+adminRouter.get("/:id", protect, getAdminById);
+adminRouter.get("/", protect, getAllAdmins);
 
 export default adminRouter;

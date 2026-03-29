@@ -1,57 +1,75 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Products from "./pages/Products";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
-
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import { useAdmin } from "./context/AdminContext.jsx";
 
-function App() {
-  const [admin, setAdmin] = useState(null);
 
-  // Load admin session from localStorage
-  useEffect(() => {
-    const savedAdmin = localStorage.getItem("admin");
-    if (savedAdmin) setAdmin(JSON.parse(savedAdmin));
-  }, []);
+function AppRoutes() {
+  const { admin, loading } = useAdmin();
+ 
+
+  if (loading) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: "linear-gradient(135deg, #faf5ff 0%, #fff9f0 100%)" }}
+      >
+        <div className="text-center space-y-3">
+          <div className="w-8 h-8 border-2 border-[#7B1F8A] border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-xs text-gray-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            Loading...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <Router>
-      {/* Show Navbar only for public pages */}
-      {!window.location.pathname.startsWith("/admin") && <Navbar />}
+    <Routes>
+      {/* ── Public Pages ── */}
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/products" element={<Products />} />
+      <Route path="/gallery" element={<Gallery />} />
+      <Route path="/contact" element={<Contact />} />
 
-      <Routes>
-        {/* Public Pages */}
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/contact" element={<Contact />} />
+      {/* ── Admin Login ── */}
+      <Route
+        path="/admin/login"
+        element={
+          !admin
+            ? <AdminLogin />
+            : <Navigate to="/admin/dashboard" replace />
+        }
+      />
 
-        {/* Admin Pages */}
-        <Route
-          path="/admin/login"
-          element={!admin ? <AdminLogin setAdmin={setAdmin} /> : <Navigate to="/admin/dashboard" />}
-        />
-        <Route
-          path="/admin/dashboard"
-          element={admin ? <AdminDashboard admin={admin} setAdmin={setAdmin} /> : <Navigate to="/admin/login" />}
-        />
+      {/* ── Admin Dashboard (protected) ── */}
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
 
-        {/* Redirect unknown routes */}
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-
-      {/* Show Footer only for public pages */}
-      {!window.location.pathname.startsWith("/admin") && <Footer />}
-    </Router>
+      {/* ── Catch all ── */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <Router>
+      <AppRoutes />
+    </Router>
+  );
+}

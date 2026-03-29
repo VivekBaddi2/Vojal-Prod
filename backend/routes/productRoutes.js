@@ -6,22 +6,18 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/productController.js";
-
 import upload from "../middlewares/upload.js";
+import protect from "../middlewares/authMiddleware.js";
 
 const productRouter = express.Router();
 
-// Routes
+// ✅ Public routes
 productRouter.route("/").get(getProducts);
 productRouter.route("/:id").get(getProductById);
 
-// Create product with image upload
-productRouter.route("/").post(upload.single("image"), createProduct);
-
-// Update product with optional image upload
-productRouter.route("/:id").put(upload.single("image"), updateProduct);
-
-// Delete product
-productRouter.route("/:id").delete(deleteProduct);
+// ✅ Protected routes (JWT required)
+productRouter.route("/").post(protect, upload.single("image"), createProduct);
+productRouter.route("/:id").put(protect, upload.single("image"), updateProduct);
+productRouter.route("/:id").delete(protect, deleteProduct);
 
 export default productRouter;

@@ -1,68 +1,51 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import GalleryTab from "../components/GalleryTab";
+import { useAdmin } from "../context/AdminContext.jsx";
 
-export default function AdminDashboard({ admin, setAdmin }) {
-  const [tab, setTab] = useState("products"); // 'products' or 'gallery'
+const API_BASE = import.meta.env.VITE_API_URL;
 
-  // Product states
+export default function AdminDashboard() {
+  const { admin, logout } = useAdmin(); // ✅ from context
+  const [tab, setTab] = useState("products");
   const [products, setProducts] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState(""); // NEW
-  const [imageFile, setImageFile] = useState(null); // for file upload
+  const [category, setCategory] = useState("");
+  const [imageFile, setImageFile] = useState(null);
   const [editId, setEditId] = useState(null);
 
-  // Fetch products
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get("http://localhost:4000/api/product");
+      const { data } = await axios.get(`${API_BASE}/api/product`, { withCredentials: true });
       setProducts(data);
-    } catch (err) {
+    } catch {
       alert("Error fetching products");
     }
   };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  useEffect(() => { fetchProducts(); }, []);
 
-  const handleLogout = () => {
-    setAdmin(null);
-    localStorage.removeItem("admin");
-  };
-
-  // Product CRUD
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !description || !category || (!imageFile && !editId)) return;
-
     try {
       const formData = new FormData();
       formData.append("title", title);
       formData.append("description", description);
-      formData.append("category", category); // NEW
+      formData.append("category", category);
       if (imageFile) formData.append("image", imageFile);
-
+      const cfg = { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true };
       if (editId) {
-        await axios.put(`http://localhost:4000/api/product/${editId}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await axios.put(`${API_BASE}/api/product/${editId}`, formData, cfg);
         setEditId(null);
       } else {
-        await axios.post("http://localhost:4000/api/product", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-      }
-
-      // reset form
-      setTitle("");
-      setDescription("");
-      setCategory(""); // reset
-      setImageFile(null);
+await axios.post(`${API_BASE}/api/product`, formData, cfg);      }
+      setTitle(""); setDescription(""); setCategory(""); setImageFile(null);
       fetchProducts();
     } catch (err) {
-      alert(err.response?.data?.message || "Error");
+      if (err.response?.status === 401) { alert("Session expired."); logout(); }
+      else alert(err.response?.data?.message || "Error");
     }
   };
 
@@ -70,145 +53,126 @@ export default function AdminDashboard({ admin, setAdmin }) {
     setEditId(p._id);
     setTitle(p.title);
     setDescription(p.description);
-    setCategory(p.category); // NEW
-    setImageFile(null); // user can choose to upload new image
+    setCategory(p.category);
+    setImageFile(null);
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      await axios.delete(`http://localhost:4000/api/product/${id}`);
+    if (!window.confirm("Delete this product?")) return;
+    try {
+      await axios.delete(`${API_BASE}/api/product/${id}`, { withCredentials: true });
       fetchProducts();
+    } catch (err) {
+      if (err.response?.status === 401) { alert("Session expired."); logout(); }
     }
   };
 
+  const inputCls = "w-full px-4 py-2.5 border-2 border-[#ede0f7] rounded-lg text-sm text-[#3a0f45] outline-none focus:border-[#7B1F8A] transition-colors";
+
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-blue-900">Admin Dashboard</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition"
-        >
-          Logout
-        </button>
-      </div>
+    <>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap');`}</style>
+      <div className="min-h-screen bg-[#f5f5f7] p-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+        <div className="max-w-6xl mx-auto">
 
-      {/* Tabs */}
-      <div className="flex gap-4 mb-6">
-        <button
-          onClick={() => setTab("products")}
-          className={`px-4 py-2 rounded ${
-            tab === "products" ? "bg-blue-900 text-white" : "bg-white border"
-          }`}
-        >
-          Products
-        </button>
-        <button
-          onClick={() => setTab("gallery")}
-          className={`px-4 py-2 rounded ${
-            tab === "gallery" ? "bg-blue-900 text-white" : "bg-white border"
-          }`}
-        >
-          Gallery
-        </button>
-      </div>
-
-      {/* Products Tab */}
-      {tab === "products" && (
-        <>
-          {/* Create / Update Product */}
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white p-6 rounded shadow mb-6 flex flex-col gap-4"
-          >
-            <input
-              type="text"
-              placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="border p-2 rounded"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="border p-2 rounded"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="border p-2 rounded"
-              required
-            />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setImageFile(e.target.files[0])}
-              className="border p-2 rounded"
-            />
-            {editId && !imageFile && (
-              <p className="text-gray-500 text-sm">
-                Current image will remain if you don't upload a new one.
-              </p>
-            )}
-            <button className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800 transition">
-              {editId ? "Update" : "Create"}
+          {/* HEADER */}
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-2xl font-semibold text-[#3a0f45]">
+                Vojal Dashboard
+              </h1>
+              <p className="text-xs text-gray-400 mt-1">Logged in as: {admin?.email}</p>
+            </div>
+            <button
+              onClick={logout}
+              className="bg-white text-[#7B1F8A] border-2 border-[#7B1F8A] px-5 py-2 rounded-lg text-sm font-medium hover:bg-[#7B1F8A] hover:text-white transition-colors"
+            >
+              Logout
             </button>
-          </form>
-
-          {/* Product List */}
-          <div className="bg-white p-6 rounded shadow overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b">
-                  <th className="p-2">Title</th>
-                  <th className="p-2">Description</th>
-                  <th className="p-2">Category</th>
-                  <th className="p-2">Image</th>
-                  <th className="p-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((p) => (
-                  <tr key={p._id} className="border-b hover:bg-gray-50">
-                    <td className="p-2">{p.title}</td>
-                    <td className="p-2">{p.description}</td>
-                    <td className="p-2">{p.category}</td> {/* NEW */}
-                    <td className="p-2">
-                      <img
-                        src={`http://localhost:4000${p.image}`}
-                        alt={p.title}
-                        className="h-12 w-12 object-cover rounded"
-                      />
-                    </td>
-                    <td className="p-2 space-x-2">
-                      <button
-                        onClick={() => handleEdit(p)}
-                        className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-400 transition"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(p._id)}
-                        className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-500 transition"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
-        </>
-      )}
 
-      {tab === "gallery" && <GalleryTab />}
-    </div>
+          {/* TABS */}
+          <div className="flex gap-3 mb-6">
+            {["products", "gallery"].map((t) => (
+              <button key={t} onClick={() => setTab(t)}
+                className={`px-5 py-2 rounded-lg text-sm font-medium border-2 capitalize transition-all ${
+                  tab === t
+                    ? "bg-[#7B1F8A] text-white border-[#7B1F8A]"
+                    : "bg-white text-[#7B1F8A] border-[#7B1F8A] hover:bg-[#7B1F8A] hover:text-white"
+                }`}>
+                {t}
+              </button>
+            ))}
+          </div>
+
+          {tab === "products" && (
+            <>
+              {/* FORM */}
+              <form onSubmit={handleSubmit}
+                className="bg-white rounded-2xl border border-[#ede0f7] p-7 mb-6 space-y-4 shadow-sm"
+                style={{ borderTop: "4px solid #7B1F8A" }}>
+                <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="font-semibold text-[#3a0f45] text-lg">
+                  {editId ? "Update Product" : "Add New Product"}
+                </h2>
+                <div className="grid grid-cols-2 gap-4">
+                  <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} className={inputCls} required />
+                  <input type="text" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)} className={inputCls} required />
+                </div>
+                <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} className={inputCls} required />
+                <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} className={inputCls} />
+                {editId && !imageFile && (
+                  <p className="text-gray-400 text-xs">Current image will remain if you don't upload a new one.</p>
+                )}
+                <div className="flex gap-3">
+                  <button type="submit" className="bg-[#7B1F8A] text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-[#5c1a6e] transition-colors">
+                    {editId ? "Update" : "Create"}
+                  </button>
+                  {editId && (
+                    <button type="button"
+                      onClick={() => { setEditId(null); setTitle(""); setDescription(""); setCategory(""); setImageFile(null); }}
+                      className="border-2 border-gray-200 text-gray-500 px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </form>
+
+              {/* TABLE */}
+              <div className="bg-white rounded-2xl border border-[#ede0f7] overflow-hidden shadow-sm">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-[#faf5ff] border-b border-[#ede0f7]">
+                      {["Title", "Description", "Category", "Image", "Actions"].map((h) => (
+                        <th key={h} className="p-4 text-[11px] text-[#7B1F8A] font-medium uppercase tracking-wider">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.map((p) => (
+                      <tr key={p._id} className="border-b border-[#f5eef8] hover:bg-[#fdf9ff] transition-colors">
+                        <td className="p-4 text-sm font-medium text-[#3a0f45]">{p.title}</td>
+                        <td className="p-4 text-sm text-gray-400 max-w-xs truncate">{p.description}</td>
+                        <td className="p-4">
+                          <span className="text-[10px] bg-[#f3e8fa] text-[#7B1F8A] px-2.5 py-1 rounded-full">{p.category}</span>
+                        </td>
+                        <td className="p-4">
+                          <img src={`${API_BASE}${p.image}`}alt={p.title} className="h-11 w-11 object-cover rounded-lg border border-[#ede0f7]" />
+                        </td>
+                        <td className="p-4 space-x-2">
+                          <button onClick={() => handleEdit(p)} className="bg-[#C9A84C] text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:opacity-90 transition-opacity">Edit</button>
+                          <button onClick={() => handleDelete(p._id)} className="bg-red-50 text-red-500 border border-red-100 px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-red-100 transition-colors">Delete</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+
+          {tab === "gallery" && <GalleryTab />}
+        </div>
+      </div>
+    </>
   );
 }

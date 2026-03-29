@@ -2,265 +2,156 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import heroImg from "../assets/hero.jpg";
 
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const API_BASE = "http://localhost:4000";
+const fadeUp = { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } };
+const API_BASE = import.meta.env.VITE_API_URL;
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [gallery, setGallery] = useState([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
-  const [loadingGallery, setLoadingGallery] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/product`)
-      .then((res) => res.json())
-      .then((data) => setProducts(data.slice(0, 6)))
-      .finally(() => setLoadingProducts(false));
-  }, []);
-
-  useEffect(() => {
-    fetch(`${API_BASE}/api/gallery`)
-      .then((res) => res.json())
-      .then((data) => setGallery(data.slice(0, 6)))
-      .finally(() => setLoadingGallery(false));
+    fetch(`${API_BASE}/api/product`).then(r => r.json()).then(d => setProducts(d.slice(0, 8)));
+    fetch(`${API_BASE}/api/gallery`).then(r => r.json()).then(d => setGallery(d.slice(0, 8)));
   }, []);
 
   return (
     <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+        body { font-family: 'DM Sans', sans-serif; }
+        .marquee-track { display: flex; gap: 1.5rem; width: max-content; animation: marquee 30s linear infinite; }
+        .marquee-track:hover { animation-play-state: paused; }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+      `}</style>
       <Navbar />
 
-      <div className="space-y-20 overflow-hidden">
+      <div className="pt-16">
 
-        {/* ================= HERO ================= */}
-        <section
-          className="relative text-white py-20 px-6 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImg})` }}
-        >
-          <div className="absolute inset-0 bg-black/40"></div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="relative max-w-6xl mx-auto text-center space-y-4"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold">Flowtec</h1>
-            <p className="text-lg opacity-90">
-              Premium Water Taps & Plumbing Accessories
+        {/* HERO */}
+        <section className="relative min-h-[85vh] flex items-center justify-center text-white bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroImg})` }}>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#3a0f45]/80 via-[#3a0f45]/60 to-[#C9A84C]/20" />
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}
+            className="relative text-center space-y-5 px-6">
+            <p className="text-[#C9A84C] text-xs tracking-[0.2em] uppercase font-medium">Premium Plumbing Accessories</p>
+            <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-5xl md:text-6xl font-bold leading-tight">
+              Crafted for Excellence<br /><span className="text-[#C9A84C]">Built to Last</span>
+            </h1>
+            <div className="w-12 h-0.5 bg-[#C9A84C] mx-auto" />
+            <p className="text-white/75 text-base max-w-md mx-auto leading-relaxed">
+              Premium water taps, shower heads & accessories trusted by professionals worldwide.
             </p>
-            <Link
-              to="/contact"
-              className="inline-block bg-blue-900 px-6 py-3 rounded-lg font-semibold hover:scale-105 transition"
-            >
-              Get in Touch
-            </Link>
+            <div className="flex gap-4 justify-center pt-2">
+              <Link to="/products" className="bg-[#7B1F8A] text-white px-7 py-3 rounded-lg text-sm font-medium hover:bg-[#5c1a6e] transition-colors border-2 border-[#7B1F8A]">
+                Explore Products
+              </Link>
+              <Link to="/contact" className="bg-transparent text-white px-7 py-3 rounded-lg text-sm font-medium border-2 border-[#C9A84C] hover:bg-[#C9A84C] transition-colors">
+                Get in Touch
+              </Link>
+            </div>
           </motion.div>
         </section>
 
-        {/* ================= PRODUCTS ================= */}
-        <motion.section
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="bg-gray-50 py-14"
-        >
-          <div className="w-full px-6 space-y-6">
-            <div className="max-w-7xl mx-auto flex justify-between items-center">
-              <h2 className="text-3xl font-bold text-blue-900">Our Products</h2>
-              <Link to="/products" className="font-semibold text-blue-900">
-                View All →
-              </Link>
+        {/* STATS */}
+        <div className="bg-white border-b border-[#f0eadb]">
+          <div className="max-w-4xl mx-auto px-6 py-8 grid grid-cols-4 gap-6 text-center">
+            {[["500+", "Products"], ["12+", "Countries"], ["98%", "Satisfaction"], ["15+", "Years"]].map(([num, label]) => (
+              <div key={label}>
+                <div style={{ fontFamily: "'Playfair Display', serif" }} className="text-3xl font-semibold text-[#7B1F8A]">{num}</div>
+                <div className="text-xs text-gray-400 tracking-wide mt-1">{label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* PRODUCTS */}
+        <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+          className="bg-[#faf7fc] py-16 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 mb-8 flex justify-between items-end">
+            <div>
+              <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-3xl font-semibold text-[#3a0f45]">Our Products</h2>
+              <div className="w-9 h-0.5 bg-[#C9A84C] mt-2 rounded" />
             </div>
-
-            {loadingProducts ? (
-              <div className="text-center py-10 text-gray-500">
-                Loading products...
-              </div>
-            ) : (
-              <div className="overflow-hidden">
-                <div className="flex gap-6 marquee">
-                  {[...products, ...products, ...products].map((p, i) => (
-                    <div
-                      key={p._id + i}
-                      className="w-[280px] bg-white rounded-xl shadow flex-shrink-0 overflow-hidden"
-                    >
-                      <img
-                        src={`${API_BASE}${p.image}`}
-                        alt={p.title}
-                        className="h-48 w-full object-cover"
-                      />
-
-                      <div className="p-4 text-center space-y-1">
-                        <h3 className="font-bold text-blue-900 truncate">
-                          {p.title}
-                        </h3>
-                        <p className="text-sm text-gray-600 line-clamp-2">
-                          {p.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+            <Link to="/products" className="text-sm text-[#C9A84C] font-medium hover:underline">View All →</Link>
+          </div>
+          <div className="overflow-hidden px-6">
+            <div className="marquee-track">
+              {[...products, ...products].map((p, i) => (
+                <div key={i} className="w-[240px] flex-shrink-0 bg-white rounded-xl border border-[#f0eadb] overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <img src={`${API_BASE}${p.image}`} alt={p.title} className="h-44 w-full object-cover" />
+                  <div className="p-4">
+                    <span className="text-[10px] bg-[#f3e8fa] text-[#7B1F8A] px-2.5 py-1 rounded-full font-medium tracking-wide">{p.category}</span>
+                    <h3 style={{ fontFamily: "'Playfair Display', serif" }} className="font-semibold text-[#3a0f45] mt-2 text-sm truncate">{p.title}</h3>
+                    <p className="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">{p.description}</p>
+                    <div className="mt-3 text-right text-xs text-[#C9A84C] font-medium">Enquire →</div>
+                  </div>
                 </div>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
         </motion.section>
 
-        {/* ================= GALLERY ================= */}
-        <motion.section
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="py-14"
-        >
-          <div className="w-full px-6 space-y-6">
-            <div className="max-w-7xl mx-auto flex justify-between items-center">
-              <h2 className="text-3xl font-bold text-blue-900">Gallery</h2>
-              <Link to="/gallery" className="font-semibold text-blue-900">
-                View Gallery →
-              </Link>
+        {/* GALLERY */}
+        <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+          className="py-16 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 mb-8 flex justify-between items-end">
+            <div>
+              <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-3xl font-semibold text-[#3a0f45]">Gallery</h2>
+              <div className="w-9 h-0.5 bg-[#C9A84C] mt-2 rounded" />
             </div>
-
-            {loadingGallery ? (
-              <div className="text-center py-10 text-gray-500">
-                Loading gallery...
-              </div>
-            ) : (
-              <div className="overflow-hidden">
-                <div className="flex gap-6 marquee">
-                  {[...gallery, ...gallery, ...gallery].map((g, i) => (
-                    <div
-                      key={g._id + i}
-                      className="w-[280px] bg-white rounded-xl shadow flex-shrink-0 overflow-hidden"
-                    >
-                      <img
-                        src={`${API_BASE}${g.image}`}
-                        alt={g.title}
-                        className="h-56 w-full object-cover"
-                      />
-
-                      <div className="p-4 text-center space-y-1">
-                        <h4 className="font-semibold text-blue-900 truncate">
-                          {g.title}
-                        </h4>
-                        <p className="text-sm text-gray-600 line-clamp-2">
-                          {g.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+            <Link to="/gallery" className="text-sm text-[#C9A84C] font-medium hover:underline">View All →</Link>
+          </div>
+          <div className="overflow-hidden px-6">
+            <div className="marquee-track">
+              {[...gallery, ...gallery].map((g, i) => (
+                <div key={i} className="w-[260px] flex-shrink-0 bg-white rounded-xl border border-[#f0eadb] overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <img src={`${API_BASE}${g.image}`} alt={g.title} className="h-48 w-full object-cover" />
+                  <div className="p-4 text-center">
+                    <h4 style={{ fontFamily: "'Playfair Display', serif" }} className="font-semibold text-[#3a0f45] text-sm truncate">{g.title}</h4>
+                    <p className="text-xs text-gray-400 mt-1 line-clamp-2">{g.description}</p>
+                  </div>
                 </div>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
         </motion.section>
 
+        {/* REVIEWS */}
+        <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+          className="bg-[#faf7fc] py-16 border-t border-[#f0eadb]">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="text-center mb-12">
+              <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-3xl font-semibold text-[#3a0f45]">What Our Clients Say</h2>
+              <div className="w-9 h-0.5 bg-[#C9A84C] mx-auto mt-3 rounded" />
+              <p className="text-gray-500 text-sm mt-3">Trusted by professionals, builders, and homeowners</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              {[
+                { name: "Ramesh Kulkarni", role: "Architect · Pune", text: "Vojal products are premium in quality and design. The finish and durability exceeded our expectations on every project." },
+                { name: "Amit Verma", role: "Builder · Bangalore", text: "Excellent service and reliable products. Vojal has become our go-to brand for all plumbing accessories across sites." },
+                { name: "Sneha Iyer", role: "Interior Designer · Mumbai", text: "Modern designs with outstanding performance. Highly recommended for residential and commercial projects alike." },
+              ].map((r, i) => (
+                <div key={i} className="bg-white rounded-xl border border-[#f0eadb] border-t-4 border-t-[#C9A84C] p-6 space-y-3">
+                  <div className="text-[#C9A84C] text-sm tracking-widest">★★★★★</div>
+                  <p className="text-gray-500 text-sm leading-relaxed">{r.text}</p>
+                  <div>
+                    <p style={{ fontFamily: "'Playfair Display', serif" }} className="font-semibold text-[#3a0f45] text-sm">{r.name}</p>
+                    <p className="text-xs text-gray-400">{r.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+
+        {/* CTA BAND */}
         
-{/* ================= REVIEWS ================= */}
-<motion.section
-  variants={fadeUp}
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: true }}
-  className="bg-gray-50 py-16"
->
-  <div className="max-w-7xl mx-auto px-6 space-y-10">
-
-    {/* Heading */}
-    <div className="text-center space-y-2">
-      <h2 className="text-3xl font-bold text-blue-900">
-        What Our Clients Say
-      </h2>
-      <p className="text-gray-600">
-        Trusted by professionals, builders, and homeowners
-      </p>
-    </div>
-
-    {/* Reviews Grid */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-      {/* Review Card */}
-      <div className="bg-white rounded-xl shadow p-6 space-y-4">
-        <div className="flex text-yellow-400 text-lg">
-          ★★★★★
-        </div>
-        <p className="text-gray-600 text-sm leading-relaxed">
-          Flowtec products are premium in quality and design. 
-          The finish and durability exceeded our expectations.
-        </p>
-        <div>
-          <p className="font-semibold text-blue-900">Ramesh Kulkarni</p>
-          <p className="text-xs text-gray-500">Architect • Pune</p>
-        </div>
-      </div>
-
-      {/* Review Card */}
-      <div className="bg-white rounded-xl shadow p-6 space-y-4">
-        <div className="flex text-yellow-400 text-lg">
-          ★★★★★
-        </div>
-        <p className="text-gray-600 text-sm leading-relaxed">
-          Excellent service and reliable products. 
-          Flowtec has become our go-to brand for plumbing accessories.
-        </p>
-        <div>
-          <p className="font-semibold text-blue-900">Amit Verma</p>
-          <p className="text-xs text-gray-500">Builder • Bangalore</p>
-        </div>
-      </div>
-
-      {/* Review Card */}
-      <div className="bg-white rounded-xl shadow p-6 space-y-4">
-        <div className="flex text-yellow-400 text-lg">
-          ★★★★★
-        </div>
-        <p className="text-gray-600 text-sm leading-relaxed">
-          Modern designs with outstanding performance. 
-          Highly recommended for both residential and commercial projects.
-        </p>
-        <div>
-          <p className="font-semibold text-blue-900">Sneha Iyer</p>
-          <p className="text-xs text-gray-500">Interior Designer • Mumbai</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</motion.section>
 
       </div>
-
-      {/* ================= PERFECT MARQUEE ================= */}
-      <style>{`
-  :root {
-    --carousel-speed: 28s; /* balanced: not fast, not slow */
-  }
-
-  @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-33.333%);
-    }
-  }
-
-  .marquee {
-    width: max-content;
-    animation: marquee var(--carousel-speed) linear infinite;
-  }
-`}</style>
-
+      <Footer />
     </>
-
-    
   );
 }
