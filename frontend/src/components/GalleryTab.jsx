@@ -12,7 +12,7 @@ export default function GalleryTab() {
 const fetchGallery = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/api/gallery`, {
+     const res = await fetch(`${API_BASE}/api/gallery`, {
         credentials: "include", // ✅ send cookies
       });
       const data = await res.json();
@@ -40,7 +40,7 @@ const fetchGallery = async () => {
     if (form.image) formData.append("image", form.image);
 
     try {
-      const url = editingId ? `${API}/api/gallery/${editingId}` : `${API}/api/gallery`;
+     const url = editingId ? `${API_BASE}/api/gallery/${editingId}` : `${API_BASE}/api/gallery`;
       const method = editingId ? "PUT" : "POST";
 
       // ✅ Send token in header
@@ -64,7 +64,7 @@ const fetchGallery = async () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this image?")) return;
     // ✅ Send token in header
-   await fetch(`${API}/api/gallery/${id}`, {
+  await fetch(`${API_BASE}/api/gallery/${id}`, {
       method: "DELETE",
       credentials: "include", // ✅ send cookies
     });
@@ -149,7 +149,7 @@ const fetchGallery = async () => {
                 className="bg-white rounded-xl shadow overflow-hidden border border-gray-100 hover:border-[#7B1C1C] transition"
               >
                 <img
-                   src={`${API}${item.image}`}
+                  src={`${API_BASE}${item.image}`}
                   alt={item.title}
                   className="h-48 w-full object-cover"
                 />

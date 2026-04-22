@@ -7,7 +7,7 @@ import appRoutes from "./routes/index.js";
 import dotenv from "dotenv";
 import path from "path";
 
-dotenv.config();
+dotenv.config({ path: "./.env" });
 
 const port = process.env.PORT || 4000;
 const app = express();
