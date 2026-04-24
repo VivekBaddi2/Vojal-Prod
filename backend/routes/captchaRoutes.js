@@ -34,8 +34,8 @@ router.post("/verify", captchaLimiter, async (req, res) => {
     );
 
   const { success, score, action } = response.data;
-
-if (!success || score < 0.7 || action !== "enquire") {
+const allowedActions = ["enquire", "admin_login"];
+if (!success || score < 0.7 || !allowedActions.includes(action)) {
   return res.status(400).json({
     success: false,
     message: "Bot detected",

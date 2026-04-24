@@ -14,18 +14,23 @@ const adminRouter = express.Router();
 
 // ── Public ──
 adminRouter.post("/login", adminLogin);
+adminRouter.post("/logout", adminLogout); // ✅ no protect
 
-// ── Verify session (used by App.jsx on load) ──
+// ── Verify session (USED BY FRONTEND ON REFRESH) ──
 adminRouter.get("/verify", protect, (req, res) => {
-  res.json({ email: req.admin.email });
+  res.json({
+    _id: req.admin.id,
+    email: req.admin.email,
+  });
 });
 
-// ── Auth required ──
-adminRouter.post("/logout", protect, adminLogout);
+// ── Protected Routes ──
 adminRouter.post("/create", protect, createAdmin);
 adminRouter.put("/update/:id", protect, updateAdmin);
 adminRouter.delete("/delete/:id", protect, deleteAdmin);
-adminRouter.get("/:id", protect, getAdminById);
+
+// ⚠️ VERY IMPORTANT ORDER
 adminRouter.get("/", protect, getAllAdmins);
+adminRouter.get("/:id", protect, getAdminById);
 
 export default adminRouter;

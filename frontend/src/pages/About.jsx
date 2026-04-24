@@ -13,8 +13,7 @@ export default function About() {
     <>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap');`}</style>
       <Navbar />
-      <div className="pt-16" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-
+    <div className="pt-16 text-[15px] leading-7" style={{ fontFamily: "'DM Sans', sans-serif" }}>
         {/* HERO */}
         <section className="relative min-h-[55vh] flex items-center justify-center text-white bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImg})` }}>
@@ -22,13 +21,13 @@ export default function About() {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
             className="relative text-center space-y-4 px-6">
             <p className="text-[#C9A84C] text-xs tracking-[0.2em] uppercase font-medium">About Vojal Engineering</p>
-            <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-4xl md:text-5xl font-bold">
-              Premium Water Taps &<br />Plumbing Accessories
-            </h1>
-            <div className="w-12 h-0.5 bg-[#C9A84C] mx-auto" />
-            <p className="text-white/75 text-sm max-w-md mx-auto leading-relaxed">
-              Trusted worldwide for innovative design, sustainable manufacturing, and lasting performance.
-            </p>
+            <h1 className="text-4xl md:text-5xl font-bold">
+  Durable PTMT & Plastic<br />Water Tap Solutions
+</h1>
+
+<p className="text-white/80 text-basemax-w-md mx-auto leading-relaxed">
+  Trusted manufacturer from Hubli delivering reliable, affordable, and long-lasting water tap solutions.
+</p>
             <Link to="/contact" className="inline-block bg-[#7B1F8A] text-white px-6 py-3 rounded-lg text-sm font-medium border-2 border-[#7B1F8A] hover:bg-[#5c1a6e] transition-colors mt-2">
               Get in Touch
             </Link>
@@ -70,29 +69,33 @@ export default function About() {
       initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
       className="grid md:grid-cols-2 gap-16 items-center"
     >
-      <div className="space-y-5">
+      <div className="space-y-5 max-w-xl">
         <h2 style={{ fontFamily: "'Playfair Display', serif" }}
           className="text-3xl font-semibold text-[#3a0f45]">
           Our Story
           <div className="w-9 h-0.5 bg-[#C9A84C] mt-2 rounded" />
         </h2>
-        <p className="text-gray-500 text-sm leading-relaxed">
-          Vojal Engineering is a trusted manufacturer of high-quality plastic and PTMT water taps,
-          proudly based in Hubli, Karnataka. With a strong commitment to innovation, durability,
-          and customer satisfaction, we deliver reliable water solutions designed for modern homes
-          and commercial spaces.
-        </p>
-        <p className="text-gray-500 text-sm leading-relaxed">
-          Founded with a vision to make premium-quality taps accessible and affordable, Vojal
-          Engineering combines advanced manufacturing techniques with stringent quality control
-          to ensure every product meets industry standards.
-        </p>
-        <p className="text-gray-500 text-sm leading-relaxed">
-          We take pride in building strong relationships with our partners by offering consistent
-          quality, competitive pricing, and dependable service. Our mission remains clear — to
-          become a preferred brand in the water tap industry by delivering value, reliability,
-          and trust in every drop.
-        </p>
+      <p className="text-gray-600 text-base leading-6">
+Vojal Engineering is a trusted manufacturer of high-quality plastic and PTMT water taps, proudly based in Hubli, Karnataka. With a strong commitment to innovation, durability, and customer satisfaction, we deliver reliable water solutions designed for modern homes and commercial spaces.
+</p>
+<div className="w-16 h-0.5 bg-[#C9A84C] my-4"></div>
+
+<p className="text-gray-600 text-base leading-6">
+Founded with a vision to make premium-quality taps accessible and affordable, we combine advanced manufacturing techniques with strict quality control to ensure every product meets industry standards. Our taps are built for durability, corrosion resistance, and long-lasting performance in diverse water conditions.
+</p>
+
+<p className="text-gray-600 text-base leading-6">
+We focus on continuous improvement and customer-centric growth by offering products that balance functionality with modern design. Our wide product range serves dealers, distributors, and customers across Karnataka and beyond.
+</p>
+
+<p className="text-gray-600 text-base leading-6">
+Our mission is simple — to become a preferred brand in the water tap industry by delivering value, reliability, and trust in every drop.
+</p>
+<div className="bg-[#faf7fc] border-l-4 border-[#7B1F8A] p-4 rounded-lg">
+  <p className="text-[#3a0f45] font-medium text-sm">
+    Delivering value, reliability, and trust in every drop.
+  </p>
+</div>
       </div>
 
       <div className="bg-[#faf7fc] border border-[#ede0f7] border-l-4 border-l-[#C9A84C] rounded-2xl p-8">
@@ -192,7 +195,7 @@ export default function About() {
               className="text-base font-semibold text-[#7B1F8A] mb-2">
               {val.title}
             </h4>
-            <p className="text-gray-500 text-sm leading-relaxed">{val.desc}</p>
+            <p className="text-gray-600 text-base leading-6">{val.desc}</p>
           </div>
         ))}
       </div>
@@ -206,19 +209,31 @@ export default function About() {
           <div className="max-w-6xl mx-auto px-6 text-center">
             <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-3xl font-semibold text-[#3a0f45] mb-3">Why Choose Vojal?</h2>
             <div className="w-9 h-0.5 bg-[#C9A84C] mx-auto mb-4 rounded" />
-            <p className="text-gray-500 text-sm max-w-md mx-auto mb-12 leading-relaxed">
-              Trusted globally for quality, design, and reliability — focused on modern aesthetics and sustainable production.
+            <p className="text-gray-600 text-sm leading-6 max-w-md mx-auto mb-12">
+            Trusted for quality, reliability, and consistent performance — focused on modern aesthetics and sustainable production.
             </p>
             <div className="grid md:grid-cols-3 gap-6">
               {[
-                { icon: "🌐", title: "Global Trust", desc: "Used and trusted by international clients and distributors across 12+ countries." },
-                { icon: "🏆", title: "Durable Quality", desc: "Premium brass and chrome materials engineered to last for decades." },
-                { icon: "✨", title: "Innovative Design", desc: "Modern, sleek, and functional designs that elevate every space." },
-              ].map((c, i) => (
+  {
+    icon: "🏭",
+    title: "Trusted Manufacturing",
+    desc: "Hubli-based manufacturer specializing in plastic & PTMT water taps."
+  },
+  {
+    icon: "🛠️",
+    title: "Reliable Quality",
+    desc: "Designed for durability, corrosion resistance, and long-term performance."
+  },
+  {
+    icon: "💰",
+    title: "Affordable Excellence",
+    desc: "Competitive pricing with consistent quality for dealers and distributors."
+  }
+].map((c, i) => (
                 <div key={i} className="bg-white rounded-xl border border-[#f0eadb] border-b-4 border-b-[#C9A84C] p-7 hover:shadow-lg transition-shadow">
                   <div className="text-3xl mb-4">{c.icon}</div>
                   <h4 style={{ fontFamily: "'Playfair Display', serif" }} className="text-lg font-semibold text-[#7B1F8A] mb-2">{c.title}</h4>
-                  <p className="text-gray-500 text-sm leading-relaxed">{c.desc}</p>
+                  <p className="text-gray-600 text-base leading-6">{c.desc}</p>
                 </div>
               ))}
             </div>

@@ -23,7 +23,7 @@ export const getProductById = asyncHandler(async (req, res) => {
 
 // Create product
 export const createProduct = asyncHandler(async (req, res) => {
-  const { title, description, category } = req.body;
+  const { title, description, category, mrp } = req.body;
   const image = req.file ? `/uploads/${req.file.filename}` : null;
 
   if (!title || !description || !image || !category) {
@@ -31,14 +31,14 @@ export const createProduct = asyncHandler(async (req, res) => {
     throw new Error("Title, description, image, and category are required");
   }
 
-  const product = new Product({ title, description, image, category });
+  const product = new Product({ title, description, image, category, mrp });
   const createdProduct = await product.save();
   res.status(201).json(createdProduct);
 });
 
 // Update product
 export const updateProduct = asyncHandler(async (req, res) => {
-  const { title, description, category } = req.body;
+  const { title, description, category, mrp } = req.body;
   const product = await Product.findById(req.params.id);
 
   if (!product) {
@@ -50,6 +50,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
   if (title) product.title = title;
   if (description) product.description = description;
   if (category) product.category = category;
+  if (mrp !== undefined) product.mrp = mrp;
 
   const updatedProduct = await product.save();
   res.json(updatedProduct);

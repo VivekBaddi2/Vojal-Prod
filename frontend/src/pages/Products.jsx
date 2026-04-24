@@ -40,7 +40,7 @@ export default function Products() {
   useEffect(() => { fetchCategories(); }, []);
   useEffect(() => { fetchProducts(selectedCategory); }, [selectedCategory]);
 
-const handleWhatsApp = async (product) => {
+  const handleWhatsApp = async (product) => {
     try {
       if (!executeRecaptcha) return;
       setIsLoading(true);
@@ -110,11 +110,10 @@ const handleWhatsApp = async (product) => {
           <div className="max-w-6xl mx-auto px-6 py-4 flex gap-3 overflow-x-auto">
             {categories.map(cat => (
               <button key={cat} onClick={() => setSelectedCategory(cat)}
-                className={`px-5 py-2 rounded-full text-xs font-medium border-2 whitespace-nowrap transition-all ${
-                  selectedCategory === cat
+                className={`px-5 py-2 rounded-full text-xs font-medium border-2 whitespace-nowrap transition-all ${selectedCategory === cat
                     ? "bg-[#7B1F8A] border-[#7B1F8A] text-white shadow-sm"
                     : "bg-white border-[#7B1F8A] text-[#7B1F8A] hover:bg-[#7B1F8A] hover:text-white"
-                }`}>
+                  }`}>
                 {cat}
               </button>
             ))}
@@ -157,7 +156,12 @@ const handleWhatsApp = async (product) => {
                       <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">{p.description}</p>
                       <div className="mt-4 flex items-center justify-between">
                         <span className="text-[10px] text-gray-300 uppercase tracking-wide">{p.category}</span>
-                        <span className="text-[#C9A84C] text-xs font-medium">Enquire →</span>
+                        <div className="flex items-center gap-2">
+  {p.mrp > 0 && (
+    <span className="text-[#7B1F8A] text-xs font-semibold">₹{p.mrp}</span>
+  )}
+  <span className="text-[#C9A84C] text-xs font-medium">Enquire →</span>
+</div>
                       </div>
                     </div>
                   </motion.div>
@@ -191,10 +195,15 @@ const handleWhatsApp = async (product) => {
                   <div className="w-8 h-0.5 bg-[#C9A84C] mt-2 rounded" />
                 </div>
                 <p className="text-gray-500 text-sm leading-relaxed">{selectedProduct.description}</p>
-                <div className="bg-[#faf7fc] rounded-xl p-3 flex items-center gap-3">
-                  <span className="text-[10px] text-gray-400 uppercase tracking-wide">Category</span>
-                  <span className="text-xs font-medium text-[#7B1F8A] bg-white px-3 py-1 rounded-full border border-[#ede0f7]">{selectedProduct.category}</span>
-                </div>
+               <div className="bg-[#faf7fc] rounded-xl p-3 flex items-center justify-between">
+  <div className="flex items-center gap-3">
+    <span className="text-[10px] text-gray-400 uppercase tracking-wide">Category</span>
+    <span className="text-xs font-medium text-[#7B1F8A] bg-white px-3 py-1 rounded-full border border-[#ede0f7]">{selectedProduct.category}</span>
+  </div>
+  {selectedProduct.mrp > 0 && (
+    <span className="text-sm font-bold text-[#7B1F8A]">₹{selectedProduct.mrp}</span>
+  )}
+</div>
                 <div className="border-t border-gray-100 pt-4 space-y-3">
                   <p className="text-[11px] text-gray-400 text-center">Contact us on WhatsApp for pricing & bulk orders</p>
                   <button
@@ -216,8 +225,89 @@ const handleWhatsApp = async (product) => {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* CATALOGUES */}
+      {/* CATALOGUES */}
+      <CatalogueSection />
       <Footer />
     </>
+  );
+}
+
+function CatalogueSection() {
+  const [catalogues, setCatalogues] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/catalogue`)
+      .then(r => r.json())
+      .then(data => setCatalogues(data))
+      .catch(() => { });
+  }, []);
+
+  if (catalogues.length === 0) return null;
+
+  return (
+    <section className="py-16 px-6 bg-white">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-10">
+          <p className="text-[#C9A84C] uppercase tracking-widest text-xs font-medium mb-2">
+            Downloads
+          </p>
+          <h2
+            style={{ fontFamily: "'Playfair Display', serif" }}
+            className="text-2xl font-semibold text-[#3a0f45]"
+          >
+            Product Catalogues
+          </h2>
+          <div className="w-9 h-0.5 bg-[#C9A84C] mt-2 rounded" />
+          <p className="text-gray-400 text-xs mt-2">
+            Download our product catalogues for detailed specifications
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {catalogues.map((c) => (
+            <motion.div
+              key={c._id}
+              whileHover={{ y: -4 }}
+              className="bg-[#faf7fc] rounded-2xl border border-[#f0eadb] p-6 flex flex-col gap-4 hover:shadow-lg transition-all duration-300"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-[#f3e8fa] rounded-xl flex items-center justify-center text-3xl flex-shrink-0">
+                  📄
+                </div>
+                <div>
+                  <h3
+                    style={{ fontFamily: "'Playfair Display', serif" }}
+                    className="font-semibold text-[#3a0f45] text-sm leading-tight"
+                  >
+                    {c.title}
+                  </h3>
+                  {c.description && (
+                    <p className="text-xs text-gray-400 mt-1 line-clamp-2">
+                      {c.description}
+                    </p>
+                  )}
+                  <span className="text-[10px] bg-[#f3e8fa] text-[#7B1F8A] px-2 py-0.5 rounded-full mt-1 inline-block">
+                    {c.category || "General"}
+                  </span>
+                </div>
+              </div>
+
+
+              <a
+                href={`${API_BASE}/api/catalogue/download/${c.file.split("/").pop()}`}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium bg-gradient-to-r from-[#7B1F8A] to-[#9b2db0] text-white shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200 active:scale-95"
+              >
+                <span>⬇</span>
+                <span>Download PDF</span>
+
+
+              </a>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 

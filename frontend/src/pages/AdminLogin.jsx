@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useAdmin } from "../context/AdminContext.jsx";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 const API_BASE = import.meta.env.VITE_API_URL;
 
 export default function AdminLogin() {
@@ -9,25 +10,42 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+const [loading, setLoading] = useState(false);
+const [touched, setTouched] = useState(false);
+const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-   const { data } = await axios.post(
-  `${API_BASE}/api/admin/login`,
-        { email, password },
-        { withCredentials: true }
-      );
-      login(data); // ✅ sets admin in context
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    } finally {
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setError("");
+
+  if (!executeRecaptcha) {
+    setError("reCAPTCHA not ready. Please try again.");
+    return;
+  }
+
+  setLoading(true);
+  try {
+    const token = await executeRecaptcha("admin_login");
+
+    const verify = await axios.post(`${API_BASE}/api/captcha/verify`, { token });
+    if (!verify.data.success) {
+      setError("Bot detected. Please try again.");
       setLoading(false);
+      return;
     }
-  };
+
+    const { data } = await axios.post(
+      `${API_BASE}/api/admin/login`,
+      { email, password },
+      { withCredentials: true }
+    );
+    login(data);
+  } catch (err) {
+    setError(err.response?.data?.message || "Login failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>
@@ -66,6 +84,7 @@ export default function AdminLogin() {
                 </label>
                 <input
                   type="email"
+                    onFocus={() => setTouched(true)}
                   placeholder="admin@vojal.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -88,11 +107,11 @@ export default function AdminLogin() {
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
                 />
               </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-[#7B1F8A] text-white py-3 rounded-lg text-sm font-medium hover:bg-[#5c1a6e] transition-colors disabled:opacity-60 mt-1"
-              >
+             <button
+  type="submit"
+  disabled={loading || !touched}
+  className="w-full bg-[#7B1F8A] text-white py-3 rounded-lg text-sm font-medium hover:bg-[#5c1a6e] transition-colors disabled:opacity-60 mt-1"
+>
                 {loading ? "Logging in..." : "Login to Dashboard"}
               </button>
             </form>
