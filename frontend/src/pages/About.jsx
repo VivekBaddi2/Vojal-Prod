@@ -91,14 +91,14 @@ We focus on continuous improvement and customer-centric growth by offering produ
 <p className="text-gray-600 text-base leading-6">
 Our mission is simple — to become a preferred brand in the water tap industry by delivering value, reliability, and trust in every drop.
 </p>
-<div className="bg-[#faf7fc] border-l-4 border-[#7B1F8A] p-4 rounded-lg">
+<div className="bg-white border-l-4 border-[#7B1F8A] p-4 rounded-lg">
   <p className="text-[#3a0f45] font-medium text-sm">
     Delivering value, reliability, and trust in every drop.
   </p>
 </div>
       </div>
 
-      <div className="bg-[#faf7fc] border border-[#ede0f7] border-l-4 border-l-[#C9A84C] rounded-2xl p-8">
+      <div className="bg-white border border-[#ede0f7] border-l-4 border-l-[#C9A84C] rounded-2xl p-8">
         <h3 style={{ fontFamily: "'Playfair Display', serif" }}
           className="text-xl font-semibold text-[#7B1F8A] mb-6">
           At a Glance
@@ -131,7 +131,7 @@ Our mission is simple — to become a preferred brand in the water tap industry 
         Our Mission
       </h2>
       <div className="w-9 h-0.5 bg-[#C9A84C] mx-auto mb-6 rounded" />
-      <div className="bg-[#faf7fc] border border-[#ede0f7] border-l-4 border-l-[#7B1F8A] rounded-2xl p-8 text-left">
+      <div className="bg-white border border-[#ede0f7] border-l-4 border-l-[#7B1F8A] rounded-2xl p-8 text-left">
         <p className="text-gray-600 text-base leading-relaxed">
           To deliver <span className="text-[#7B1F8A] font-medium">precision-engineered water tap solutions</span> that
           combine durability, functionality, and design excellence, ensuring maximum value for
@@ -154,7 +154,7 @@ Our mission is simple — to become a preferred brand in the water tap industry 
         Our Vision
       </h2>
       <div className="w-9 h-0.5 bg-[#C9A84C] mx-auto mb-6 rounded" />
-      <div className="bg-[#faf7fc] border border-[#ede0f7] border-l-4 border-l-[#C9A84C] rounded-2xl p-8 text-left">
+    <div className="bg-white border border-[#ede0f7] border-l-4 border-l-[#C9A84C] rounded-2xl p-8 text-left">
         <p className="text-gray-600 text-base leading-relaxed">
           To establish Vojal Engineering as a <span className="text-[#7B1F8A] font-medium">benchmark brand</span> in
           the PTMT and plastic tap industry, recognized for innovation, quality leadership,
@@ -205,7 +205,7 @@ Our mission is simple — to become a preferred brand in the water tap industry 
 
         {/* WHY CHOOSE */}
         <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-          className="bg-[#faf7fc] border-t border-b border-[#f0eadb] py-16">
+          className="bg-white border-t border-b border-[#f0eadb] py-16">
           <div className="max-w-6xl mx-auto px-6 text-center">
             <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-3xl font-semibold text-[#3a0f45] mb-3">Why Choose Vojal?</h2>
             <div className="w-9 h-0.5 bg-[#C9A84C] mx-auto mb-4 rounded" />

@@ -113,24 +113,24 @@ const handleSubmit = async () => {
         Contact Us
       </h2>
 
-      <p className="text-gray-400 text-sm mt-2 mb-6">
-        Reach out for inquiries, ideas, or collaborations.
-      </p>
+     
 
       {/* ADDRESS */}
       <div className="mb-6 space-y-2 text-sm text-gray-600">
         <p className="font-medium text-[#3a0f45]">Head Office</p>
         <p>
-          C 529, Industrial Estate,<br />
-          Gokul Road, Hubballi,<br />
-          Karnataka – 580030
+          C 529, 5th Cross, 2nd Gate, Industrial Estate, Gokul Road, Hubballi,<br />
+          Karnataka–580030
         </p>
-        <p>📞 +91 9876543210</p>
+        <p>📞 +91 8217534640</p>
         <p>✉️ vojalindia@gmail.com</p>
       </div>
 
       {/* FORM */}
       <div className="space-y-4">
+         <p className="text-gray-400 text-sm mt-2 mb-6">
+        Reach out for Enquiries, Dealership or collaborations.
+      </p>
 
         <input
   name="name"

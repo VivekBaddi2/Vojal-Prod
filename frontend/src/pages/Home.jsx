@@ -85,7 +85,7 @@ export default function Home() {
 
             {/* Bottom mini stats */}
             <div className="flex justify-center gap-8 pt-8 border-t border-white/10 mt-8 flex-wrap">
-              {[["500+", "Products"], ["12+", "Countries"], ["98%", "Satisfaction"], ["15+", "Years"]].map(([num, label]) => (
+              {[["30+", "Products"], ["4+", "States"], ["98%", "Satisfaction"], ["7+", "Years"]].map(([num, label]) => (
                 <div key={label} className="text-center">
                   <div style={{ fontFamily: "'Playfair Display', serif" }}
                     className="text-2xl font-semibold text-[#C9A84C]">{num}</div>
@@ -98,12 +98,12 @@ export default function Home() {
 
           {/* Bottom fade */}
           <div className="absolute bottom-0 left-0 right-0 h-20"
-            style={{ background: "linear-gradient(to bottom, transparent, #faf7fc)" }} />
+      style={{ background: "linear-gradient(to bottom, transparent, #ffffff)" }}/>
         </section>
 
         {/* PRODUCTS */}
         <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-          className="bg-[#faf7fc] py-16 overflow-hidden">
+      className="bg-white py-16 overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 mb-8 flex justify-between items-end">
             <div>
               <h2 style={{ fontFamily: "'Playfair Display', serif" }}
@@ -163,7 +163,7 @@ export default function Home() {
 
         {/* REVIEWS */}
         <motion.section variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-          className="bg-[#faf7fc] py-16 border-t border-[#f0eadb]">
+        className="bg-white py-16 border-t border-[#f0eadb]">
           <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-12">
               <h2 style={{ fontFamily: "'Playfair Display', serif" }}

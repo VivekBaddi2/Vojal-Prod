@@ -24,7 +24,9 @@ export default function Navbar() {
             { path: "/", label: "Home" },
             { path: "/about", label: "About Us" },
             { path: "/products", label: "Products" },
+             { path: "/catalogue", label: "Catalogue" },
             { path: "/gallery", label: "Gallery" },
+           
             { path: "/contact", label: "Contact" },
           ].map((item) => (
             <li key={item.path}>

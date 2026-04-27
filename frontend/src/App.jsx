@@ -5,6 +5,7 @@ import About from "./pages/About";
 import Products from "./pages/Products";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
+import Catalogue from "./pages/Catalogue";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -39,7 +40,7 @@ function AppRoutes() {
       <Route path="/products" element={<Products />} />
       <Route path="/gallery" element={<Gallery />} />
       <Route path="/contact" element={<Contact />} />
-
+<Route path="/catalogue" element={<Catalogue />} />
       {/* ── Admin Login ── */}
       <Route
         path="/admin/login"
