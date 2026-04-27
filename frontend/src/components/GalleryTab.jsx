@@ -81,9 +81,9 @@ const fetchGallery = async () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-xl shadow p-6 border-t-4 border-[#7B1C1C]"
+        className="bg-white rounded-xl shadow p-6 border-t-4 border-[#7B1F8A]"
       >
-        <h2 className="text-xl font-bold text-[#7B1C1C] mb-4">
+        <h2 className="text-xl font-bold text-[#7B1F8A] mb-4">
           {editingId ? "Edit Gallery Image" : "Add Gallery Image"}
         </h2>
 
@@ -95,7 +95,7 @@ const fetchGallery = async () => {
             onChange={handleChange}
             placeholder="Title"
             required
-            className="border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#7B1C1C]"
+            className="border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#7B1F8A]"
           />
           <input
             type="file"
@@ -110,12 +110,12 @@ const fetchGallery = async () => {
             onChange={handleChange}
             placeholder="Description"
             required
-            className="border p-3 rounded md:col-span-2 focus:outline-none focus:ring-2 focus:ring-[#7B1C1C]"
+            className="border p-3 rounded md:col-span-2 focus:outline-none focus:ring-2 focus:ring-[#7B1F8A]"
           />
           <div className="flex gap-4">
             <button
               type="submit"
-              className="bg-[#7B1C1C] text-white px-6 py-2 rounded hover:bg-[#9B2C2C] transition"
+              className="bg-[#7B1F8A] text-white px-6 py-2 rounded hover:bg-[#7B1F8A] transition"
             >
               {editingId ? "Update" : "Upload"}
             </button>
@@ -133,7 +133,7 @@ const fetchGallery = async () => {
       </motion.div>
 
       <div>
-        <h3 className="text-xl font-bold text-[#7B1C1C] mb-4">Gallery Images</h3>
+        <h3 className="text-xl font-bold text-[#7B1F8A] mb-4">Gallery Images</h3>
         {loading ? (
           <p className="text-gray-500">Loading...</p>
         ) : gallery.length === 0 ? (
@@ -165,7 +165,7 @@ const fetchGallery = async () => {
                     </button>
                     <button
                       onClick={() => handleDelete(item._id)}
-                      className="text-[#7B1C1C] font-semibold hover:underline"
+                      className="text-[#7B1F8A] font-semibold hover:underline"
                     >
                       Delete
                     </button>

@@ -54,14 +54,13 @@ export const adminLogin = asyncHandler(async (req, res) => {
     throw new Error("Invalid email or password");
   }
 
-  
-// ✅ Set JWT in HttpOnly Cookie
+  // ✅ Set JWT in HttpOnly Cookie
   res.cookie("adminToken", generateToken(admin._id, admin.email), {
-  httpOnly: true,
-  secure: false,
-  sameSite: "lax", // keep lax
-});
-
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // ✅ fix #2 also
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // ✅ match JWT's 1d
+  });
   res.json({
     _id: admin._id,
     email: admin.email,
@@ -118,7 +117,9 @@ export const getAllAdmins = asyncHandler(async (req, res) => {
 export const adminLogout = asyncHandler(async (req, res) => {
   res.cookie("adminToken", "", {
     httpOnly: true,
-    expires: new Date(0), // expire immediately
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax", // ✅ must match
+    expires: new Date(0),
   });
   res.json({ message: "Logged out successfully" });
 });

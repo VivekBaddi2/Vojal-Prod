@@ -9,18 +9,24 @@ export function AdminProvider({ children }) {
   const [loading, setLoading] = useState(true); // ✅ start true
 
   // ✅ restore session on refresh
+
   useEffect(() => {
     const checkAuth = async () => {
+      // ✅ Only ping the server if user is actually on an admin page
+      if (!window.location.pathname.startsWith("/admin")) {
+        setLoading(false);
+        return;
+      }
+
       try {
-       const { data } = await axios.get(
-  `${API_BASE}/api/admin/verify`,
-  { withCredentials: true }
-);
-        setAdmin(data); // ✅ restore admin
-      } catch (err) {
+        const { data } = await axios.get(`${API_BASE}/api/admin/verify`, {
+          withCredentials: true,
+        });
+        setAdmin(data);
+      } catch {
         setAdmin(null);
       } finally {
-        setLoading(false); // ✅ stop loading
+        setLoading(false);
       }
     };
 
@@ -28,7 +34,7 @@ export function AdminProvider({ children }) {
   }, []);
 
   const login = (data) => {
-    setAdmin({ email: data.email });
+    setAdmin({ _id: data._id, email: data.email });
   };
 
   const logout = async () => {
@@ -36,7 +42,7 @@ export function AdminProvider({ children }) {
       await axios.post(
         `${API_BASE}/api/admin/logout`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
     } catch (err) {
       console.error("Logout error:", err);
