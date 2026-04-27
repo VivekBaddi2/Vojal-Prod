@@ -70,7 +70,19 @@ export default function Products() {
       }
 
       // ✅ Step 3 — Open WhatsApp (only if verified)
-      const message = `Hello Vojal Engineering! 👋\n\nI'm interested in:\n*Product:* ${product.title}\n*Category:* ${product.category}\n*Description:* ${product.description}\n\nPlease share more details. Thank you!`;
+const imageUrl = `${API_BASE}${product.image}`;
+
+const message = `Hello Vojal Engineering! 👋
+
+I'm interested in:
+
+*Product:* ${product.title}
+*Category:* ${product.category}
+*Description:* ${product.description}
+
+*Product Image:* ${imageUrl}
+
+Please share more details. Thank you!`;
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
       const link = document.createElement("a");

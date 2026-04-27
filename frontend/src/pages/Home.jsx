@@ -22,46 +22,50 @@ export default function Home() {
 
   const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleWhatsApp = async (product) => {
-    try {
-      if (!executeRecaptcha) return;
+const handleWhatsApp = async (product) => {
+  try {
+    if (!executeRecaptcha) return;
 
-      setIsLoading(true);
+    setIsLoading(true);
 
-      const token = await executeRecaptcha("enquire");
+    const token = await executeRecaptcha("enquire");
 
-      const verify = await axios.post(`${API_BASE}/api/captcha/verify`, {
-        token,
-      });
+    const verify = await axios.post(`${API_BASE}/api/captcha/verify`, {
+      token,
+    });
 
-      if (!verify.data.success) {
-        alert("Bot detected! Please try again.");
-        setIsLoading(false);
-        return;
-      }
+    if (!verify.data.success) {
+      alert("Bot detected! Please try again.");
+      setIsLoading(false);
+      return;
+    }
 
-      const message = `Hello Vojal Engineering! 👋
+    const imageUrl = `${API_BASE}${product.image}`;
+
+    const message = `Hello Vojal Engineering! 👋
 
 I'm interested in:
 *Product:* ${product.title}
 *Category:* ${product.category}
 *Description:* ${product.description}
 
+*Product Image:* ${imageUrl}
+
 Please share more details. Thank you!`;
 
-      window.open(
-        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
-        "_blank",
-      );
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
+      "_blank"
+    );
 
-      setSelectedProduct(null);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err);
-      alert("Verification failed.");
-      setIsLoading(false);
-    }
-  };
+    setSelectedProduct(null);
+    setIsLoading(false);
+  } catch (err) {
+    console.error(err);
+    alert("Verification failed.");
+    setIsLoading(false);
+  }
+};
 
   useEffect(() => {
     fetch(`${API_BASE}/api/product`)
