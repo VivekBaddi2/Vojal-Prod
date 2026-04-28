@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import logo from "../assets/logo.jpg";
+import logo from "../assets/logo.png";
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   const navItems = [
     { path: "/", label: "Home" },
     { path: "/about", label: "About Us" },
@@ -68,25 +71,23 @@ export default function Navbar() {
         }
       `}</style>
 
-      <div className="max-w-7xl mx-auto px-8 lg:px-12 h-20 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex justify-between items-center">
         {/* Logo */}
         <NavLink to="/" className="flex items-center">
           <img
             src={logo}
-            alt="Vojal"
-            className="h-14 lg:h-16 w-auto object-contain scale-110 hover:scale-115 transition-transform duration-300"
+            alt="Logo"
+            className="h-12 lg:h-16 w-auto object-contain scale-110"
           />
         </NavLink>
 
-        {/* Nav Links */}
+        {/* Desktop Nav Links */}
         <ul className="hidden lg:flex gap-10 list-none m-0 p-0">
           {navItems.map((item) => (
             <li key={item.path}>
               <NavLink
                 to={item.path}
-                className={({ isActive }) =>
-                  `nav-link${isActive ? " active" : ""}`
-                }
+                className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
               >
                 {item.label}
               </NavLink>
@@ -94,14 +95,51 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* CTA */}
-        <NavLink
-          to="/contact"
-          className="cta-btn text-white text-sm font-semibold px-6 py-3 rounded-xl transition-all duration-300"
+        {/* Desktop CTA */}
+        <div className="hidden lg:flex items-center">
+          <NavLink
+            to="/contact"
+            className="cta-btn text-white text-sm font-semibold px-6 py-3 rounded-xl transition-all duration-300"
+          >
+            Get in Touch
+          </NavLink>
+        </div>
+
+        {/* Hamburger Icon (Mobile) */}
+        <button 
+          onClick={() => setIsOpen(!isOpen)} 
+          className="lg:hidden p-2 focus:outline-none"
         >
-          Get in Touch
-        </NavLink>
+          <div className="flex flex-col gap-1.5">
+            <span className={`block w-6 h-0.5 bg-gray-800 transition-transform ${isOpen ? "rotate-45 translate-y-2" : ""}`}></span>
+            <span className={`block w-6 h-0.5 bg-gray-800 ${isOpen ? "opacity-0" : ""}`}></span>
+            <span className={`block w-6 h-0.5 bg-gray-800 transition-transform ${isOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
+          </div>
+        </button>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {isOpen && (
+        <div className="lg:hidden absolute top-20 left-0 w-full bg-white border-b border-[#eee4c9] p-8 flex flex-col items-center gap-6 shadow-xl animate-in fade-in slide-in-from-top-4 duration-300">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              onClick={() => setIsOpen(false)}
+              className="nav-link text-base"
+            >
+              {item.label}
+            </NavLink>
+          ))}
+          <NavLink 
+            to="/contact" 
+            onClick={() => setIsOpen(false)}
+            className="cta-btn text-white px-8 py-3 rounded-xl mt-2"
+          >
+            Get in Touch
+          </NavLink>
+        </div>
+      )}
     </nav>
   );
 }

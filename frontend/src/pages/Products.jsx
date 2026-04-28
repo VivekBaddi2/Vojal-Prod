@@ -1,6 +1,7 @@
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -36,7 +37,7 @@ export default function Products() {
     try {
       const { data } = await axios.get(`${API_BASE}/api/product`);
       setCategories(["All", ...new Set(data.map((p) => p.category))]);
-    } catch {}
+    } catch { }
   };
 
   useEffect(() => {
@@ -70,9 +71,9 @@ export default function Products() {
       }
 
       // ✅ Step 3 — Open WhatsApp (only if verified)
-const imageUrl = `${API_BASE}${product.image}`;
+      const imageUrl = `${API_BASE}${product.image}`;
 
-const message = `Hello Vojal Engineering! 👋
+      const message = `Hello Vojal Engineering! 👋
 
 I'm interested in:
 
@@ -110,9 +111,14 @@ Please share more details. Thank you!`;
         {/* HERO */}
         <section
           className="relative min-h-[55vh] flex items-center justify-center text-white bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImg})` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#3a0f45]/80 via-[#3a0f45]/60 to-[#C9A84C]/20" />
+          <div
+            style={{
+              background:
+                "linear-gradient(135deg, #2a0a35 0%, #3a0f45 50%, #1a0628 100%)",
+            }}
+            className="absolute inset-0 "
+          />
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -132,6 +138,9 @@ Please share more details. Thank you!`;
             <p className="text-white/75 text-sm">
               Premium Water Taps & Plumbing Accessories
             </p>
+              <Link to="/contact" className="inline-block bg-[#7B1F8A] text-white px-6 py-3 rounded-lg text-sm font-semibold border-2 border-[#7B1F8A] hover:bg-[#5c1a6e] transition-colors mt-2">
+              Get in Touch
+            </Link>
           </motion.div>
         </section>
 
@@ -142,11 +151,10 @@ Please share more details. Thank you!`;
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-5 py-2 rounded-full text-xs font-medium border-2 whitespace-nowrap transition-all ${
-                  selectedCategory === cat
+                className={`px-5 py-2 rounded-full text-xs font-medium border-2 whitespace-nowrap transition-all ${selectedCategory === cat
                     ? "bg-[#7B1F8A] border-[#7B1F8A] text-white shadow-sm"
                     : "bg-white border-[#7B1F8A] text-[#7B1F8A] hover:bg-[#7B1F8A] hover:text-white"
-                }`}
+                  }`}
               >
                 {cat}
               </button>
@@ -160,7 +168,7 @@ Please share more details. Thank you!`;
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="bg-[#faf7fc] py-16 px-6"
+          className="bg-[#faf7fc] py-8 md:py-16 px-6"
         >
           <div className="max-w-6xl mx-auto">
             <div className="mb-10">

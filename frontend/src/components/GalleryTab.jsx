@@ -8,11 +8,11 @@ export default function GalleryTab() {
   const [form, setForm] = useState({ title: "", description: "", image: null });
   const [editingId, setEditingId] = useState(null);
 
- 
-const fetchGallery = async () => {
+
+  const fetchGallery = async () => {
     setLoading(true);
     try {
-     const res = await fetch(`${API_BASE}/api/gallery`, {
+      const res = await fetch(`${API_BASE}/api/gallery`, {
         credentials: "include", // ✅ send cookies
       });
       const data = await res.json();
@@ -40,11 +40,11 @@ const fetchGallery = async () => {
     if (form.image) formData.append("image", form.image);
 
     try {
-     const url = editingId ? `${API_BASE}/api/gallery/${editingId}` : `${API_BASE}/api/gallery`;
+      const url = editingId ? `${API_BASE}/api/gallery/${editingId}` : `${API_BASE}/api/gallery`;
       const method = editingId ? "PUT" : "POST";
 
       // ✅ Send token in header
-   await fetch(url, {
+      await fetch(url, {
         method,
         body: formData,
         credentials: "include", // ✅ send cookies
@@ -64,7 +64,7 @@ const fetchGallery = async () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this image?")) return;
     // ✅ Send token in header
-  await fetch(`${API_BASE}/api/gallery/${id}`, {
+    await fetch(`${API_BASE}/api/gallery/${id}`, {
       method: "DELETE",
       credentials: "include", // ✅ send cookies
     });
@@ -95,14 +95,14 @@ const fetchGallery = async () => {
             onChange={handleChange}
             placeholder="Title"
             required
-            className="border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#7B1F8A]"
+            className="w-full border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#7B1F8A]"
           />
           <input
             type="file"
             name="image"
             accept="image/*"
             onChange={handleChange}
-            className="border p-3 rounded"
+            className="w-full border p-3 rounded"
           />
           <textarea
             name="description"
@@ -110,12 +110,13 @@ const fetchGallery = async () => {
             onChange={handleChange}
             placeholder="Description"
             required
-            className="border p-3 rounded md:col-span-2 focus:outline-none focus:ring-2 focus:ring-[#7B1F8A]"
+            className="w-full border p-3 rounded md:col-span-2 focus:outline-none focus:ring-2 focus:ring-[#7B1F8A]"
           />
-          <div className="flex gap-4">
+          {/* Buttons container */}
+          <div className="flex gap-4 md:col-span-2">
             <button
               type="submit"
-              className="bg-[#7B1F8A] text-white px-6 py-2 rounded hover:bg-[#7B1F8A] transition"
+              className="bg-[#7B1F8A] text-white px-6 py-2 rounded hover:opacity-90 transition"
             >
               {editingId ? "Update" : "Upload"}
             </button>
@@ -154,7 +155,7 @@ const fetchGallery = async () => {
                   className="h-48 w-full object-cover"
                 />
                 <div className="p-4 space-y-2">
-                  <h4 className="font-semibold text-[#7B1C1C]">{item.title}</h4>
+                  <h4 className="font-semibold  text-[#7B1F8A]">{item.title}</h4>
                   <p className="text-sm text-gray-600 line-clamp-2">{item.description}</p>
                   <div className="flex gap-3 pt-2">
                     <button
@@ -165,7 +166,7 @@ const fetchGallery = async () => {
                     </button>
                     <button
                       onClick={() => handleDelete(item._id)}
-                      className="text-[#7B1F8A] font-semibold hover:underline"
+                      className="text-[#bf2020] font-semibold hover:underline"
                     >
                       Delete
                     </button>

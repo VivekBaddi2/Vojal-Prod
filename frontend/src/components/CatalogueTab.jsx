@@ -123,7 +123,7 @@ export default function CatalogueTab() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="md:grid space-y-4 md:space-y-0 grid-cols-3 gap-4">
             <input
               type="text"
               name="title"
@@ -178,7 +178,7 @@ export default function CatalogueTab() {
           />
           <div>
             <label className="text-xs text-gray-400 mb-1 block">
-              PDF File {editingId && "(leave empty to keep current)"}
+              PDF File (Max upload size 5MB) {editingId && "(leave empty to keep current)"}
             </label>
             <input
               type="file"
@@ -228,10 +228,10 @@ export default function CatalogueTab() {
               <motion.div
                 key={c._id}
                 whileHover={{ scale: 1.01 }}
-                className="bg-white rounded-2xl border border-[#ede0f7] p-5 flex items-center justify-between shadow-sm"
+                className="bg-white rounded-2xl border border-[#ede0f7] p-5 flex flex-col gap-4 md:gap-0 md:flex-row items-center justify-between shadow-sm"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-[#f3e8fa] rounded-xl flex items-center justify-center text-2xl">
+                <div className="flex flex-row items-center gap-4">
+                  <div className="p-2 md:w-12 md:h-12 bg-[#f3e8fa] rounded-xl flex items-center justify-center text-xl md:text-2xl self-start">
                     📄
                   </div>
                   <div>
@@ -239,7 +239,7 @@ export default function CatalogueTab() {
                       {c.title}
                     </h4>
                     {c.description && (
-                      <p className="text-xs text-gray-400 mt-0.5">
+                      <p className="text-xs text-gray-400 mt-0.5 text-ellipsis line-clamp-2">
                         {c.description}
                       </p>
                     )}
@@ -248,7 +248,7 @@ export default function CatalogueTab() {
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex flex-row items-center gap-3">
                   <a
                     href={`${API_BASE}${c.file}`}
                     target="_blank"

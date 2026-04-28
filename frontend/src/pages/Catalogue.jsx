@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import heroImg from "../assets/hero.jpg";
@@ -29,9 +30,13 @@ export default function Catalogue() {
         {/* HERO */}
         <section
           className="relative min-h-[55vh] flex items-center justify-center text-white bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImg})` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#3a0f45]/80 via-[#3a0f45]/60 to-[#C9A84C]/20" />
+          <div
+            style={{
+              background:
+                "linear-gradient(135deg, #2a0a35 0%, #3a0f45 50%, #1a0628 100%)",
+            }}
+            className="absolute inset-0" />
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -51,6 +56,9 @@ export default function Catalogue() {
             <p className="text-white/75 text-sm">
               Download our product catalogues for detailed specifications
             </p>
+            <Link to="/contact" className="inline-block bg-[#7B1F8A] text-white px-6 py-3 rounded-lg text-sm font-semibold border-2 border-[#7B1F8A] hover:bg-[#5c1a6e] transition-colors mt-2">
+              Get in Touch
+            </Link>
           </motion.div>
         </section>
 
@@ -60,7 +68,7 @@ export default function Catalogue() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="py-16 px-6 bg-[#faf7fc]"
+          className="py-8 md:py-16 px-6 bg-[#faf7fc]"
         >
           <div className="max-w-6xl mx-auto">
             <div className="mb-10">

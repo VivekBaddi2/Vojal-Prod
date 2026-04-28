@@ -57,9 +57,13 @@ export default function Contact() {
         {/* HERO */}
         <section
           className="relative min-h-[55vh] flex items-center justify-center text-white bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImg})` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#3a0f45]/80 via-[#3a0f45]/60 to-[#C9A84C]/20" />
+          <div
+            style={{
+              background:
+                "linear-gradient(135deg, #2a0a35 0%, #3a0f45 50%, #1a0628 100%)",
+            }}
+            className="absolute inset-0" />
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -88,11 +92,11 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-7xl mx-auto px-6 py-20"
+          className="max-w-7xl mx-auto px-6 py-8 md:py-16"
         >
-          <div className="grid md:grid-cols-2 gap-10 items-start">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-start">
             {/* LEFT - MAP */}
-            <div className="rounded-2xl overflow-hidden border border-[#f0eadb] shadow-sm h-[520px]">
+            <div className="order-last md:order-none rounded-2xl overflow-hidden border border-[#f0eadb] shadow-sm h-[260px] md:h-[520px]">
               <iframe
                 title="Location"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3847.372308884277!2d75.11147179999999!3d15.35631!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb8d7036088cd7f%3A0xc294080da817975e!2sVojal%20Engineering!5e0!3m2!1sen!2sin!4v1774263930365!5m2!1sen!2sin"
@@ -102,7 +106,7 @@ export default function Contact() {
             </div>
 
             {/* RIGHT - CONTACT FORM */}
-            <div className="bg-white rounded-2xl border border-[#f0eadb] p-10 shadow-sm">
+            <div className="bg-white rounded-2xl border border-[#f0eadb] p-4 md:p-10 shadow-sm">
               <h2
                 style={{ fontFamily: "'Playfair Display', serif" }}
                 className="text-3xl font-semibold text-[#3a0f45]"
@@ -125,7 +129,7 @@ export default function Contact() {
 
               {/* FORM */}
               <div className="space-y-4">
-                <p className="text-gray-400 text-sm mt-2 mb-6">
+                <p className="text-gray-400 text-sm md:mt-2 md:mb-6">
                   Reach out for Enquiries, Dealership or collaborations.
                 </p>
 
