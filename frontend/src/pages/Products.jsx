@@ -36,7 +36,7 @@ function ProductCard({ p, index, onClick }) {
       {/* Image */}
       <div className="relative overflow-hidden" style={{ height: "220px" }}>
         <img
-          src={`${API_BASE}${p.image}`}
+          src={`${p.image}`}
           alt={p.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
@@ -148,7 +148,7 @@ function ProductModal({ product, onClose, onWhatsApp, isLoading }) {
             {/* Hero image */}
             <div className="relative" style={{ height: "260px", flexShrink: 0 }}>
               <img
-                src={`${API_BASE}${product.image}`}
+                src={`${product.image}`}
                 alt={product.title}
                 className="w-full h-full object-cover"
               />
@@ -305,7 +305,7 @@ export default function Products() {
         return;
       }
 
-      const imageUrl = `${API_BASE}${product.image}`;
+      const imageUrl = `${product.image}`;
       const message = `Hello Vojal Engineering! 👋\n\nI'm interested in:\n\n*Product:* ${product.title}\n*Category:* ${product.category}\n*Description:* ${product.description}\n\n*Product Image:* ${imageUrl}\n\nPlease share more details. Thank you!`;
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 

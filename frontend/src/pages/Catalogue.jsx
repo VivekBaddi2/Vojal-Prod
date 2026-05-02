@@ -76,9 +76,7 @@ function CatalogueCard({ c, index }) {
         </div>
 
         <a
-          href={`${API_BASE}/api/catalogue/download/${c.file
-            .split("/")
-            .pop()}`}
+          href={`${c.file}`}
           className="mt-5 w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white transition-all duration-300"
           style={{
             background: "linear-gradient(135deg, #7B1F8A, #9b30ae)",

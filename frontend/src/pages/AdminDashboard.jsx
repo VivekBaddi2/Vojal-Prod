@@ -517,7 +517,7 @@ export default function AdminDashboard() {
                               </td>
                               <td className="px-4 sm:px-5 py-3.5">
                                 <img
-                                  src={`${API_BASE}${p.image}`}
+                                  src={`${p.image}`}
                                   alt={p.title}
                                   className="w-11 h-11 object-cover rounded-xl border border-[#ebe3f2]"
                                 />

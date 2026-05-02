@@ -40,7 +40,7 @@ function Lightbox({ item, onClose }) {
 
         {/* Image */}
         <img
-          src={`${API_BASE}${item.image}`}
+          src={`${item.image}`}
           alt={item.title}
           className="w-full object-cover"
           style={{ maxHeight: "70vh", display: "block" }}
@@ -96,7 +96,7 @@ function GalleryCard({ g, index, onClick }) {
       {/* Image area */}
       <div className="relative overflow-hidden" style={{ height: "230px" }}>
         <img
-          src={`${API_BASE}${g.image}`}
+          src={`${g.image}`}
           alt={g.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />

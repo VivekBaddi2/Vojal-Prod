@@ -250,7 +250,7 @@ export default function CatalogueTab() {
                 </div>
                 <div className="flex flex-row items-center gap-3">
                   <a
-                    href={`${API_BASE}${c.file}`}
+                    href={`${c.file}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xs text-[#7B1F8A] border border-[#7B1F8A] px-3 py-1.5 rounded-lg hover:bg-[#7B1F8A] hover:text-white transition-colors"

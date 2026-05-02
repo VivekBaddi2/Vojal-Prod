@@ -150,7 +150,7 @@ export default function GalleryTab() {
                 className="bg-white rounded-xl shadow overflow-hidden border border-gray-100 hover:border-[#7B1C1C] transition"
               >
                 <img
-                  src={`${API_BASE}${item.image}`}
+                  src={`${item.image}`}
                   alt={item.title}
                   className="h-48 w-full object-cover"
                 />

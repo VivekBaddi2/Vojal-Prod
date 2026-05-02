@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Gallery from "../schemas/gallerySchema.js";
+import { v2 as cloudinary } from "cloudinary";
 
 /* =========================
    GET ALL GALLERY IMAGES
@@ -37,7 +38,7 @@ export const createGallery = asyncHandler(async (req, res) => {
   const gallery = await Gallery.create({
     title,
     description,
-    image: `/uploads/${req.file.filename}`,
+    image: req.file.path,
   });
 
   res.status(201).json(gallery);
@@ -59,7 +60,7 @@ export const updateGallery = asyncHandler(async (req, res) => {
   gallery.description = description || gallery.description;
 
   if (req.file) {
-    gallery.image = `/uploads/${req.file.filename}`;
+    gallery.image = req.file.path;
   }
 
   const updatedGallery = await gallery.save();
@@ -77,6 +78,17 @@ export const deleteGallery = asyncHandler(async (req, res) => {
     throw new Error("Gallery item not found");
   }
 
+  if (gallery.image) {
+    try {
+      const publicId = gallery.image.split('/').slice(-2).join('/').split('.')[0];
+      
+      await cloudinary.uploader.destroy(publicId);
+    } catch (error) {
+      console.error("Cloudinary Delete Failed:", error);
+    }
+  }
+
   await gallery.deleteOne();
-  res.json({ message: "Gallery item removed" });
+  
+  res.json({ message: "Gallery item and image removed successfully" });
 });

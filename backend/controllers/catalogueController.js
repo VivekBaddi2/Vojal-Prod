@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Catalogue from "../schemas/catalogueSchema.js";
+import { v2 as cloudinary } from "cloudinary";
 
 // GET all catalogues
 export const getCatalogues = asyncHandler(async (req, res) => {
@@ -20,7 +21,7 @@ export const createCatalogue = asyncHandler(async (req, res) => {
     title,
     description,
     category,
-    file: `/uploads/${req.file.filename}`,
+    file: req.file.path,
   });
 
   res.status(201).json(catalogue);
@@ -35,7 +36,21 @@ export const deleteCatalogue = asyncHandler(async (req, res) => {
     throw new Error("Catalogue not found");
   }
 
+  if (catalogue.file) {
+    try {
+      const publicId = catalogue.file.split('/').slice(-2).join('/').split('.')[0];
+      const isPdf = catalogue.file.toLowerCase().endsWith(".pdf");
+      
+      await cloudinary.uploader.destroy(publicId, { 
+        resource_type: isPdf ? "raw" : "image" 
+      });
+    } catch (error) {
+      console.error("Cloudinary Catalogue Delete Failed:", error);
+    }
+  }
+
   await catalogue.deleteOne();
+  
   res.json({ message: "Catalogue deleted successfully" });
 });
 
@@ -54,7 +69,7 @@ export const updateCatalogue = asyncHandler(async (req, res) => {
   catalogue.category = category || catalogue.category;
 
   if (req.file) {
-    catalogue.file = `/uploads/${req.file.filename}`;
+    catalogue.file = req.file.path;
   }
 
   const updated = await catalogue.save();

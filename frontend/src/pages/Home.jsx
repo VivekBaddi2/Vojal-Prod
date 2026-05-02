@@ -53,7 +53,7 @@ function ProductModal({ product, onClose, onWhatsApp, isLoading }) {
           {/* Scrollable body */}
           <div className="overflow-y-auto flex-1" style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}>
             <div className="relative" style={{ height: "260px", flexShrink: 0 }}>
-              <img src={`${API_BASE}${product.image}`} alt={product.title} className="w-full h-full object-cover" style={{ borderRadius: "24px 24px 0 0" }} />
+              <img src={`${product.image}`} alt={product.title} className="w-full h-full object-cover" style={{ borderRadius: "24px 24px 0 0" }} />
               <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(42,10,53,0.75) 0%, transparent 55%)", borderRadius: "24px 24px 0 0" }} />
               <div className="absolute bottom-4 left-4 text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full" style={{ background: "rgba(201,168,76,0.92)", color: "#2a0a35" }}>
                 {product.category}
@@ -188,7 +188,7 @@ export default function Home() {
       const token = await executeRecaptcha("enquire");
       const verify = await axios.post(`${API_BASE}/api/captcha/verify`, { token });
       if (!verify.data.success) { alert("Bot detected! Please try again."); setIsLoading(false); return; }
-      const message = `Hello Vojal Engineering! 👋\n\nI'm interested in:\n*Product:* ${product.title}\n*Category:* ${product.category}\n*Description:* ${product.description}\n\n*Product Image:* ${API_BASE}${product.image}\n\nPlease share more details. Thank you!`;
+      const message = `Hello Vojal Engineering! 👋\n\nI'm interested in:\n*Product:* ${product.title}\n*Category:* ${product.category}\n*Description:* ${product.description}\n\n*Product Image:* ${product.image}\n\nPlease share more details. Thank you!`;
       const link = document.createElement("a");
       link.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
       link.target = "_blank"; link.rel = "noopener noreferrer";
@@ -433,7 +433,7 @@ export default function Home() {
                 onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 2px 16px rgba(58,15,69,0.07)"; e.currentTarget.style.borderColor = "#f0eadb"; }}
               >
                 <div className="relative overflow-hidden" style={{ height: "175px" }}>
-                  <img src={`${API_BASE}${p.image}`} alt={p.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <img src={`${p.image}`} alt={p.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center" style={{ background: "rgba(42,10,53,0.42)" }}>
                     <span className="text-white text-[10px] font-semibold tracking-widest uppercase px-4 py-2 rounded-full" style={{ background: "rgba(123,31,138,0.78)", border: "1px solid rgba(255,255,255,0.3)" }}>View Details</span>
                   </div>
@@ -542,7 +542,7 @@ export default function Home() {
                 >
                   <div className="relative overflow-hidden" style={{ height: "195px" }}>
                     <img
-                      src={`${API_BASE}${g.image}`}
+                      src={`${g.image}`}
                       alt={g.title || "Gallery"}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
                     />
@@ -566,7 +566,7 @@ export default function Home() {
               >
                 <div className="relative overflow-hidden" style={{ height: "160px" }}>
                   <img
-                    src={`${API_BASE}${g.image}`}
+                    src={`${g.image}`}
                     alt={g.title || "Gallery"}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
