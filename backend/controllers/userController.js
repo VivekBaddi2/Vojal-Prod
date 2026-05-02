@@ -58,7 +58,7 @@ export const adminLogin = asyncHandler(async (req, res) => {
   res.cookie("adminToken", generateToken(admin._id, admin.email), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production", // ✅ fix #2 also
-    sameSite: "lax",
+    sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000, // ✅ match JWT's 1d
   });
   res.json({
