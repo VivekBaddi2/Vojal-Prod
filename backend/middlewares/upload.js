@@ -1,19 +1,30 @@
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
-import path from "path";
 
-// Storage config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const filename = `${Date.now()}${ext}`;
-    cb(null, filename);
+// 1. Configure Cloudinary (Add these to your Render Env Variables!)
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// 2. Setup the Cloudinary Storage Engine
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    // Determine the folder based on file type
+    const isPdf = file.mimetype === "application/pdf";
+    return {
+      folder: "vojal_uploads",
+      format: isPdf ? "pdf" : undefined, // Cloudinary handles image formats automatically
+      resource_type: isPdf ? "raw" : "image", // PDFs MUST be 'raw' or 'auto'
+      public_id: `${Date.now()}-${file.originalname.split('.')[0]}`,
+    };
   },
 });
 
-// File filter (only images)
+// 3. Keep your existing File Filter logic
 const fileFilter = (req, file, cb) => {
   if (
     file.mimetype.startsWith("image/") ||
@@ -25,7 +36,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// ✅ Added size limit
+// 4. Create the middleware with your existing limits
 const upload = multer({
   storage,
   fileFilter,
