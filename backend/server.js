@@ -17,7 +17,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://vojal.in",
   "https://www.vojal.in", // Include 'www' if you use it
-  "https://vojal.vercel.app/"
+  "https://vojal.vercel.app"
 ];
 
 app.use(cors({
