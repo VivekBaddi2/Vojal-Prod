@@ -19,12 +19,10 @@ router.post("/", contactLimiter, async (req, res) => {
   const { name, email, message, token } = req.body;
 
   try {
-    // ✅ Basic validation
     if (!name || !email || !message || !token) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // ✅ Verify reCAPTCHA (with timeout)
     const captcha = await axios.post(
       "https://www.google.com/recaptcha/api/siteverify",
       null,
@@ -37,31 +35,25 @@ router.post("/", contactLimiter, async (req, res) => {
       }
     );
 
-    if (!captcha.data.success || captcha.data.score < 0.6) {
-      return res.status(400).json({ message: "Bot detected" });
+    // Some reCAPTCHA versions don't return a score, check success first
+    if (!captcha.data.success || (captcha.data.score !== undefined && captcha.data.score < 0.5)) {
+      return res.status(400).json({ message: "Security check failed" });
     }
 
-    // ✅ Email transporter
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true, // Use SSL/TLS
+      service: "gmail",
       auth: {
         user: process.env.SMTP_EMAIL,
         pass: process.env.SMTP_PASSWORD,
       },
-      // ADD THIS LINE:
-      connectionTimeout: 10000, // 10 seconds
-      greetingTimeout: 10000,
-      socketTimeout: 10000,
     });
 
-    // ✅ Send email
     await transporter.sendMail({
       from: `"${name}" <${process.env.SMTP_EMAIL}>`,
       to: process.env.SMTP_EMAIL,
       replyTo: email,
       subject: `New Enquiry from ${name}`,
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`, // Plain text fallback
       html: `
         <h3>New Contact Enquiry</h3>
         <p><b>Name:</b> ${name}</p>
@@ -74,7 +66,7 @@ router.post("/", contactLimiter, async (req, res) => {
 
   } catch (err) {
     console.error("CONTACT ERROR:", err);
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
