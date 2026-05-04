@@ -35,6 +35,8 @@ app.use(cors({
   credentials: true,
 }));
 
+app.set("trust proxy", 1);
+
 // ✅ Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

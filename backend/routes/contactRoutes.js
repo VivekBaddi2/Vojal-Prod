@@ -30,8 +30,8 @@ router.post("/", contactLimiter, async (req, res) => {
       }
     );
 
-    if (!captcha.data.success || captcha.data.score < 0.6) {
-      return res.status(400).json({ message: "Bot detected" });
+    if (!captcha.data.success || (captcha.data.score !== undefined && captcha.data.score < 0.5)) {
+      return res.status(400).json({ message: "Security check failed" });
     }
 
     // Build WhatsApp URL
@@ -42,7 +42,7 @@ router.post("/", contactLimiter, async (req, res) => {
 
   } catch (err) {
     console.error("CONTACT ERROR:", err);
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
