@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const API_BASE = import.meta.env.VITE_API_URL;
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER;
 
 // ─── Icons ─────────────────────────────────────────────────────────────────────
 const PhoneIcon = () => (
@@ -25,17 +26,7 @@ const MapPinIcon = () => (
     <circle cx="12" cy="10" r="3" />
   </svg>
 );
-const SendIcon = () => (
-  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="22" y1="2" x2="11" y2="13" />
-    <polygon points="22 2 15 22 11 13 2 9 22 2" />
-  </svg>
-);
-const CheckIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="20 6 9 17 4 12" />
-  </svg>
-);
+
 
 // ─── Contact Info Card ──────────────────────────────────────────────────────────
 function InfoChip({ icon, label, value, href }) {
@@ -60,32 +51,14 @@ function InfoChip({ icon, label, value, href }) {
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [focused, setFocused] = useState("");
-  const { executeRecaptcha } = useGoogleReCaptcha();
+const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
+const [loading, setLoading] = useState(false);
+const [sent, setSent] = useState(false);
+const [focused, setFocused] = useState("");
+const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-  const handleSubmit = async () => {
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) return;
-    try {
-      if (!executeRecaptcha) return;
-      setLoading(true);
-      const token = await executeRecaptcha("contact_form");
-      await axios.post(`${API_BASE}/api/contact`, { ...form, token });
-      setSent(true);
-      setForm({ name: "", email: "", message: "" });
-    } catch (err) {
-      console.error(err);
-      alert("Failed to send message. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const inputStyle = (name) => ({
+const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+const inputStyle = (name) => ({
     width: "100%",
     background: "#faf7fc",
     border: `1.5px solid ${focused === name ? "#7B1F8A" : "#ede0f7"}`,
@@ -98,6 +71,34 @@ export default function Contact() {
     boxShadow: focused === name ? "0 0 0 3px rgba(123,31,138,0.1)" : "none",
     fontFamily: "'DM Sans', sans-serif",
   });
+
+const handleWhatsApp = async () => {
+  try {
+    if (!executeRecaptcha) return;
+    setLoading(true);
+  const token = await executeRecaptcha("enquire");
+    if (!token) { setLoading(false); return; }
+
+    const verify = await axios.post(`${API_BASE}/api/captcha/verify`, { token });
+    if (!verify.data.success) {
+      alert("Bot detected! Please try again.");
+      setLoading(false);
+      return;
+    }
+
+const waMessage = `New Enquiry%0a%0a*Name:* ${form.name}%0a*Phone:* ${form.phone}%0a*Email:* ${form.email ? form.email : "Not provided"}%0a*Message:* ${form.message}`;
+window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`, "_blank");
+setSent(true);
+setForm({ name: "", phone: "", email: "", message: "" });
+  } catch (err) {
+    console.error("WhatsApp error:", err);
+    alert("Verification failed. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+}; 
+
+
 
   return (
     <>
@@ -112,9 +113,8 @@ export default function Contact() {
           background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
           pointer-events: none;
         }
-
-        input::placeholder, textarea::placeholder { color: #b8a8c8; }
-        textarea { resize: none; }
+input::placeholder, textarea::placeholder { color: #b8a8c8; }
+textarea { resize: none; }
       `}</style>
 
       <Navbar />
@@ -151,7 +151,7 @@ export default function Contact() {
           >
             <div className="flex items-center justify-center gap-3">
               <div className="h-px w-10" style={{ background: "#C9A84C" }} />
-              <p className="text-[10px] tracking-[0.3em] uppercase font-semibold" style={{ color: "#C9A84C" }}>
+           <p className="text-xl sm:text-3xl tracking-[0.25em] uppercase font-semibold" style={{ color: "#C9A84C" }}>
                 Vojal Engineering
               </p>
               <div className="h-px w-10" style={{ background: "#C9A84C" }} />
@@ -180,7 +180,7 @@ export default function Contact() {
           <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-center gap-8 flex-wrap">
             {[
               { label: "Response Time", value: "< 24hrs" },
-              { label: "Client Projects", value: "200+" },
+              
               { label: "Years of Trust", value: "7+" },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-3">
@@ -219,16 +219,16 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 items-start">
+            <div className="grid md:grid-cols-2 gap-8 items-stretch">
 
               {/* ── LEFT — Info + Map ── */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="space-y-5"
-              >
+            <motion.div
+  initial={{ opacity: 0, x: -30 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+  className="flex flex-col space-y-5"
+>
                 {/* Info card */}
                 <div
                   className="rounded-2xl p-6 space-y-3"
@@ -272,14 +272,14 @@ export default function Contact() {
                 </div>
 
                 {/* Map */}
-                <div
-                  className="rounded-2xl overflow-hidden"
-                  style={{
-                    border: "1px solid #ede0f7",
-                    boxShadow: "0 4px 20px rgba(58,15,69,0.08)",
-                    height: "280px",
-                  }}
-                >
+              <div
+  className="rounded-2xl overflow-hidden flex-1"
+  style={{
+    border: "1px solid #ede0f7",
+    boxShadow: "0 4px 20px rgba(58,15,69,0.08)",
+    minHeight: "280px",
+  }}
+>
                   <iframe
                     title="Location"
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3847.372308884277!2d75.11147179999999!3d15.35631!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb8d7036088cd7f%3A0xc294080da817975e!2sVojal%20Engineering!5e0!3m2!1sen!2sin!4v1774263930365!5m2!1sen!2sin"
@@ -289,159 +289,167 @@ export default function Contact() {
                 </div>
               </motion.div>
 
-              {/* ── RIGHT — Form ── */}
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <div
-                  className="rounded-2xl p-7 md:p-10"
-                  style={{
-                    background: "white",
-                    border: "1px solid #ede0f7",
-                    boxShadow: "0 4px 24px rgba(58,15,69,0.07)",
-                  }}
-                >
-                  {/* Form header */}
-                  <div className="mb-7">
-                    <h3
-                      className="text-[#3a0f45]"
-                      style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.75rem", fontWeight: 700 }}
-                    >
-                      Send a Message
-                    </h3>
-                    <div className="flex items-center gap-2 mt-2 mb-3">
-                      <div className="h-[2px] w-8 rounded" style={{ background: "#C9A84C" }} />
-                      <div className="h-[2px] w-2 rounded" style={{ background: "#C9A84C", opacity: 0.4 }} />
-                    </div>
-                    <p className="text-gray-400 text-sm">
-                      For enquiries, dealership or collaborations — we'll get back within 24 hours.
-                    </p>
-                  </div>
+            
+             {/* ── RIGHT — WhatsApp CTA ── */}
+{/* ── RIGHT — Form + WhatsApp ── */}
+<motion.div
+  initial={{ opacity: 0, x: 30 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+  className="h-full"
+>
+  <div
+    className="rounded-2xl p-7 md:p-10 h-full"
+    style={{
+      background: "white",
+      border: "1px solid #ede0f7",
+      boxShadow: "0 4px 24px rgba(58,15,69,0.07)",
+    }}
+  >
+    <div className="mb-7">
+      <h3
+        className="text-[#3a0f45]"
+        style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.75rem", fontWeight: 700 }}
+      >
+        Send a Message
+      </h3>
+      <div className="flex items-center gap-2 mt-2 mb-3">
+        <div className="h-[2px] w-8 rounded" style={{ background: "#C9A84C" }} />
+        <div className="h-[2px] w-2 rounded" style={{ background: "#C9A84C", opacity: 0.4 }} />
+      </div>
+      <p className="text-gray-400 text-sm">
+        Fill in your details and we'll connect on WhatsApp instantly.
+      </p>
+    </div>
 
-                  {/* Success state */}
-                  {sent ? (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="flex flex-col items-center text-center py-10 space-y-4"
-                    >
-                      <div
-                        className="flex items-center justify-center w-14 h-14 rounded-full"
-                        style={{ background: "linear-gradient(135deg, #7B1F8A, #9b30ae)", color: "white" }}
-                      >
-                        <CheckIcon />
-                      </div>
-                      <div>
-                        <p
-                          className="text-[#3a0f45] font-semibold text-lg"
-                          style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                        >
-                          Message Sent!
-                        </p>
-                        <p className="text-gray-400 text-sm mt-1">
-                          Thank you for reaching out. We'll respond shortly.
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => setSent(false)}
-                        className="text-xs font-medium px-5 py-2 rounded-full transition-colors"
-                        style={{ background: "#ede0f7", color: "#7B1F8A" }}
-                      >
-                        Send another message
-                      </button>
-                    </motion.div>
-                  ) : (
-                    <div className="space-y-4">
-                      {/* Name */}
-                      <div>
-                        <label className="block text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#7B1F8A" }}>
-                          Name
-                        </label>
-                        <input
-                          name="name"
-                          value={form.name}
-                          onChange={handleChange}
-                          onFocus={() => setFocused("name")}
-                          onBlur={() => setFocused("")}
-                          placeholder="Your full name"
-                          style={inputStyle("name")}
-                        />
-                      </div>
+    {sent ? (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex flex-col items-center text-center py-10 space-y-4"
+      >
+        <div
+          className="flex items-center justify-center w-14 h-14 rounded-full"
+          style={{ background: "linear-gradient(135deg, #25D366, #1ebe5d)", color: "white" }}
+        >
+          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <div>
+          <p className="text-[#3a0f45] font-semibold text-lg" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+            Redirected to WhatsApp!
+          </p>
+          <p className="text-gray-400 text-sm mt-1">
+            Continue the conversation on WhatsApp.
+          </p>
+        </div>
+        <button
+          onClick={() => setSent(false)}
+          className="text-xs font-medium px-5 py-2 rounded-full transition-colors"
+          style={{ background: "#ede0f7", color: "#7B1F8A" }}
+        >
+          Send another message
+        </button>
+      </motion.div>
+    ) : (
+      <div className="space-y-4">
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#7B1F8A" }}>Name</label>
+          <input
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            onFocus={() => setFocused("name")}
+            onBlur={() => setFocused("")}
+            placeholder="Your full name"
+            style={inputStyle("name")}
+          />
+        </div>
 
-                      {/* Email */}
-                      <div>
-                        <label className="block text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#7B1F8A" }}>
-                          Email
-                        </label>
-                        <input
-                          name="email"
-                          type="email"
-                          value={form.email}
-                          onChange={handleChange}
-                          onFocus={() => setFocused("email")}
-                          onBlur={() => setFocused("")}
-                          placeholder="your@email.com"
-                          style={inputStyle("email")}
-                        />
-                      </div>
+        <div>
+        <label className="block text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#7B1F8A" }}>Email <span className="text-gray-300 normal-case tracking-normal font-normal">(optional)</span></label>
+          <input
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            onFocus={() => setFocused("email")}
+            onBlur={() => setFocused("")}
+            placeholder="your@email.com"
+            style={inputStyle("email")}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#7B1F8A" }}>Phone</label>
+          <input
+            name="phone"
+            type="tel"
+            value={form.phone}
+            onChange={handleChange}
+            onFocus={() => setFocused("phone")}
+            onBlur={() => setFocused("")}
+            placeholder="+91 XXXXX XXXXX"
+            style={inputStyle("phone")}
+          />
+        </div>
 
-                      {/* Message */}
-                      <div>
-                        <label className="block text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#7B1F8A" }}>
-                          Message
-                        </label>
-                        <textarea
-                          name="message"
-                          value={form.message}
-                          onChange={handleChange}
-                          onFocus={() => setFocused("message")}
-                          onBlur={() => setFocused("")}
-                          placeholder="Tell us about your enquiry..."
-                          rows={5}
-                          style={inputStyle("message")}
-                        />
-                      </div>
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#7B1F8A" }}>Message</label>
+       <textarea
+            name="message"
+            value={form.message}
+            onChange={handleChange}
+            onFocus={() => setFocused("message")}
+            onBlur={() => setFocused("")}
+            placeholder="Tell us about your enquiry..."
+            rows={4}
+            maxLength={500}
+            style={inputStyle("message")}
+          />
+          <p className="text-right text-[11px] mt-1" style={{ color: form.message.length >= 500 ? "#ef4444" : "#b8a8c8" }}>
+            {form.message.length}/500
+          </p>
+        </div>
 
-                      {/* Submit */}
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.97 }}
-                        onClick={handleSubmit}
-                        disabled={loading || !form.name.trim() || !form.email.trim() || !form.message.trim()}
-                        className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-semibold text-sm text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                        style={{
-                          background: loading
-                            ? "#9b6baa"
-                            : "linear-gradient(135deg, #7B1F8A 0%, #9b30ae 100%)",
-                          boxShadow: "0 4px 20px rgba(123,31,138,0.35)",
-                        }}
-                      >
-                        {loading ? (
-                          <>
-                            <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                              <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.3)" strokeWidth="3" />
-                              <path d="M12 2a10 10 0 0110 10" stroke="white" strokeWidth="3" strokeLinecap="round" />
-                            </svg>
-                            Sending…
-                          </>
-                        ) : (
-                          <>
-                            <SendIcon />
-                            Send Message
-                          </>
-                        )}
-                      </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={handleWhatsApp}
+         disabled={loading || !form.name.trim() || !form.phone.trim() || !form.message.trim()}
+          className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-semibold text-sm text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            background: loading ? "#82c99a" : "linear-gradient(135deg, #25D366 0%, #1ebe5d 100%)",
+            boxShadow: "0 4px 20px rgba(37,211,102,0.35)",
+          }}
+        >
+          {loading ? (
+            <>
+              <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.3)" strokeWidth="3" />
+                <path d="M12 2a10 10 0 0110 10" stroke="white" strokeWidth="3" strokeLinecap="round" />
+              </svg>
+              Verifying...
+            </>
+          ) : (
+            <>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              Send via WhatsApp
+            </>
+          )}
+        </motion.button>
 
-                      <p className="text-center text-[11px] text-gray-300 pt-1">
-                        Protected by reCAPTCHA · We never share your data
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
+        <p className="text-center text-[11px] text-gray-300 pt-1">
+          Protected by reCAPTCHA · We never share your data
+        </p>
+      </div>
+    )}
+    
+  </div>
+</motion.div>
 
             </div>
           </div>

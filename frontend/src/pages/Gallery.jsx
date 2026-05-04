@@ -223,7 +223,7 @@ export default function Gallery() {
             {/* Eyebrow */}
             <div className="flex items-center justify-center gap-3">
               <div className="h-px w-10" style={{ background: "#C9A84C" }} />
-              <p className="text-[10px] tracking-[0.3em] uppercase font-semibold" style={{ color: "#C9A84C" }}>
+              <p className="text-xl sm:text-3xl tracking-[0.25em] uppercase font-semibold" style={{ color: "#C9A84C" }}>
                 Vojal Engineering
               </p>
               <div className="h-px w-10" style={{ background: "#C9A84C" }} />
@@ -278,7 +278,7 @@ export default function Gallery() {
           <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-center gap-8 flex-wrap">
             {[
               { label: "Gallery Items", value: loading ? "—" : `${gallery.length}+` },
-              { label: "Client Projects", value: "200+" },
+             
               { label: "Years of Trust", value: "7+" },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-3">

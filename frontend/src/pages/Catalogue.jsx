@@ -179,7 +179,7 @@ export default function Catalogue() {
           >
             <div className="flex items-center justify-center gap-3">
               <div className="h-px w-10 bg-[#C9A84C]" />
-              <p className="text-[10px] tracking-[0.3em] uppercase font-semibold text-[#C9A84C]">
+              <p className="text-xl sm:text-3xl tracking-[0.25em] uppercase font-semibold text-[#C9A84C]">
                 Vojal Engineering
               </p>
               <div className="h-px w-10 bg-[#C9A84C]" />

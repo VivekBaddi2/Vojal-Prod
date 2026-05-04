@@ -33,24 +33,18 @@ router.post("/verify", captchaLimiter, async (req, res) => {
       }
     );
 
-  const { success, score, action } = response.data;
-const allowedActions = ["enquire", "admin_login"];
-if (!success || score < 0.7 || !allowedActions.includes(action)) {
+const { success, score } = response.data;
+console.log("reCAPTCHA response:", { success, score, action, errorCodes });
+
+if (!success || score < 0.5) {
   return res.status(400).json({
     success: false,
     message: "Bot detected",
+    score,
   });
 }
 
-    if (success && score >= 0.7){
-      return res.json({ success: true, score });
-    } else {
-      return res.status(400).json({
-        success: false,
-        message: "Bot detected",
-        score,
-      });
-    }
+return res.json({ success: true, score });
   } catch (err) {
     return res.status(500).json({
       success: false,

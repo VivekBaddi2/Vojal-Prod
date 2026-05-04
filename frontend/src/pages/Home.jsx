@@ -280,17 +280,17 @@ export default function Home() {
         <div className="relative text-center px-6 max-w-4xl mx-auto space-y-8">
           {/* Eyebrow */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center justify-center gap-3"
-          >
-            <div className="h-px w-12" style={{ background: "linear-gradient(90deg, transparent, #C9A84C)" }} />
-            <p className="text-[10px] tracking-[0.35em] uppercase font-semibold" style={{ color: "#C9A84C" }}>
-              Vojal Engineering
-            </p>
-            <div className="h-px w-12" style={{ background: "linear-gradient(90deg, #C9A84C, transparent)" }} />
-          </motion.div>
+  initial={{ opacity: 0, y: 16 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6 }}
+  className="flex items-center justify-center gap-5"
+>
+  <div className="h-px w-20 sm:w-28" style={{ background: "linear-gradient(90deg, transparent, #C9A84C)" }} />
+  <p className="text-xl sm:text-3xl tracking-[0.25em] uppercase font-semibold" style={{ color: "#C9A84C" }}>
+    Vojal Engineering
+  </p>
+  <div className="h-px w-20 sm:w-28" style={{ background: "linear-gradient(90deg, #C9A84C, transparent)" }} />
+</motion.div>
 
           {/* Heading */}
           <motion.h1
@@ -368,9 +368,9 @@ export default function Home() {
       <div style={{ background: "linear-gradient(90deg, #200630, #3a0f45, #200630)", borderBottom: "1px solid rgba(201,168,76,0.18)" }}>
         <div className="max-w-5xl mx-auto px-6 py-7 grid grid-cols-2 md:grid-cols-4 gap-6 divide-x divide-white/10">
           {[
-            { value: "15+", label: "Years Experience" },
-            { value: "200+", label: "Dealer Network" },
-            { value: "50+", label: "Product Range" },
+            { value: "7+", label: "Years Experience" },
+            { value: "50+", label: "Dealer Network" },
+            { value: "30+", label: "Product Range" },
             { value: "99%", label: "Client Satisfaction" },
           ].map((s, i) => <StatItem key={s.label} {...s} delay={i * 0.1} />)}
         </div>

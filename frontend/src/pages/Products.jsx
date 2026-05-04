@@ -304,11 +304,9 @@ export default function Products() {
         setIsLoading(false);
         return;
       }
-
-      const imageUrl = `${product.image}`;
-      const message = `Hello Vojal Engineering! 👋\n\nI'm interested in:\n\n*Product:* ${product.title}\n*Category:* ${product.category}\n*Description:* ${product.description}\n\n*Product Image:* ${imageUrl}\n\nPlease share more details. Thank you!`;
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-
+const imageUrl = `${product.image}`;
+const message = `Hello Vojal Engineering!\n\nI'm interested in:\n\n*Product:* ${product.title}\n*Category:* ${product.category}\n*Description:* ${product.description}\n*MRP:* ${product.mrp > 0 ? `Rs.${product.mrp}` : "Price on enquiry"}\n\n*Product Image:* ${imageUrl}\n\nPlease share more details. Thank you!`;
+const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
       const link = document.createElement("a");
       link.href = url;
       link.target = "_blank";
@@ -407,12 +405,12 @@ export default function Products() {
             {/* Eyebrow */}
             <div className="flex items-center justify-center gap-3">
               <div className="h-px w-10" style={{ background: "#C9A84C" }} />
-              <p
-                className="text-[10px] tracking-[0.3em] uppercase font-semibold"
-                style={{ color: "#C9A84C" }}
-              >
-                Vojal Engineering
-              </p>
+            <p
+  className="text-xl sm:text-3xl tracking-[0.25em] uppercase font-semibold"
+  style={{ color: "#C9A84C" }}
+>
+  Vojal Engineering
+</p>
               <div className="h-px w-10" style={{ background: "#C9A84C" }} />
             </div>
 

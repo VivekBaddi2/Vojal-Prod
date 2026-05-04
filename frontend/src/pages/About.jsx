@@ -83,7 +83,7 @@ export default function About() {
           >
             <div className="flex items-center justify-center gap-3">
               <div className="h-px w-10 bg-[#C9A84C]" />
-              <p className="text-[10px] tracking-[0.3em] uppercase font-semibold text-[#C9A84C]">
+              <p className="text-xl sm:text-3xl tracking-[0.25em] uppercase font-semibold" style={{ color: "#C9A84C" }}>
                 Vojal Engineering
               </p>
               <div className="h-px w-10 bg-[#C9A84C]" />
@@ -132,8 +132,8 @@ export default function About() {
           <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-center gap-8 flex-wrap">
             {[
               { label: "Years of Trust", value: "7+" },
-              { label: "Dealer Network", value: "100+" },
-              { label: "Products Delivered", value: "10K+" },
+              { label: "Dealer Network", value: "50+" },
+              { label: "Products Delivered", value: "3Lakhs+" },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-3">
                 <span

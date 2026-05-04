@@ -209,10 +209,10 @@ export default function Footer() {
                 {[
                   {
                     icon: "📍",
-                    text: "Industrial Estate Gokul Road, Hubballi, Karnataka",
+                    text: "C 529, 5th Cross, 2nd Gate, Industrial Estate, Gokul Road, Hubballi, Karnataka – 580030",
                   },
                   { icon: "📞", text: "+91 98765 43210" },
-                  { icon: "✉️", text: "info@vojal.com" },
+                  { icon: "✉️", text: "vojalindia@gmail.com" },
                   { icon: "🕐", text: "Mon – Sat: 9:00 AM – 6:00 PM" },
                 ].map((row, i) => (
                   <div

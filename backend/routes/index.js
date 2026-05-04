@@ -14,6 +14,6 @@ router.use("/gallery",galleryRouter);
 router.use("/captcha", captchaRouter);
 router.use("/contact", contactRoutes);
 router.use("/catalogue", catalogueRouter);
-router.use("category",catalogueRouter);
+router.use("/category",catalogueRouter);
 
 export default router;

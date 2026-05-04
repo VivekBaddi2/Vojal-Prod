@@ -1,30 +1,23 @@
 import express from "express";
 import axios from "axios";
-import nodemailer from "nodemailer";
 import rateLimit from "express-rate-limit";
 
 const router = express.Router();
 
-// ✅ limiter
 const contactLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
-  message: {
-    success: false,
-    message: "Too many requests. Please try again later.",
-  },
+  message: { success: false, message: "Too many requests. Please try again later." },
 });
 
 router.post("/", contactLimiter, async (req, res) => {
   const { name, email, message, token } = req.body;
 
   try {
-    // ✅ Basic validation
     if (!name || !email || !message || !token) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // ✅ Verify reCAPTCHA (with timeout)
     const captcha = await axios.post(
       "https://www.google.com/recaptcha/api/siteverify",
       null,
@@ -41,30 +34,11 @@ router.post("/", contactLimiter, async (req, res) => {
       return res.status(400).json({ message: "Bot detected" });
     }
 
-    // ✅ Email transporter
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.SMTP_EMAIL,
-        pass: process.env.SMTP_PASSWORD,
-      },
-    });
+    // Build WhatsApp URL
+    const waMessage = `New Contact Enquiry\n\n*Name:* ${name}\n*Email:* ${email}\n*Message:* ${message}`;
+    const waUrl = `https://wa.me/${process.env.WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
 
-    // ✅ Send email
-    await transporter.sendMail({
-      from: `"${name}" <${process.env.SMTP_EMAIL}>`,
-      to: process.env.SMTP_EMAIL,
-      replyTo: email,
-      subject: `New Enquiry from ${name}`,
-      html: `
-        <h3>New Contact Enquiry</h3>
-        <p><b>Name:</b> ${name}</p>
-        <p><b>Email:</b> ${email}</p>
-        <p><b>Message:</b><br/>${message}</p>
-      `,
-    });
-
-    res.json({ success: true });
+    res.json({ success: true, waUrl });
 
   } catch (err) {
     console.error("CONTACT ERROR:", err);
