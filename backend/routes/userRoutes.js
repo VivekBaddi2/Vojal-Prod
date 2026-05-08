@@ -25,7 +25,7 @@ adminRouter.get("/verify", protect, (req, res) => {
 });
 
 // ── Protected Routes ──
-adminRouter.post("/create", protect, createAdmin);
+adminRouter.post("/create",protect, createAdmin);
 adminRouter.put("/update/:id", protect, updateAdmin);
 adminRouter.delete("/delete/:id", protect, deleteAdmin);
 

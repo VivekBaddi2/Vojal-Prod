@@ -55,12 +55,12 @@ export const adminLogin = asyncHandler(async (req, res) => {
   }
 
   // ✅ Set JWT in HttpOnly Cookie
-  res.cookie("adminToken", generateToken(admin._id, admin.email), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // ✅ fix #2 also
-    sameSite: "none",
-    maxAge: 24 * 60 * 60 * 1000, // ✅ match JWT's 1d
-  });
+res.cookie("adminToken", generateToken(admin._id, admin.email), {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // ✅
+  maxAge: 24 * 60 * 60 * 1000,
+});
   res.json({
     _id: admin._id,
     email: admin.email,

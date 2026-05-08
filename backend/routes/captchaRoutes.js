@@ -32,8 +32,7 @@ router.post("/verify", captchaLimiter, async (req, res) => {
         },
       }
     );
-
-const { success, score } = response.data;
+const { success, score, action, "error-codes": errorCodes } = response.data;
 console.log("reCAPTCHA response:", { success, score, action, errorCodes });
 
 if (!success || score < 0.5) {

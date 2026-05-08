@@ -24,17 +24,37 @@ export const getProductById = asyncHandler(async (req, res) => {
 
 // Create product
 export const createProduct = asyncHandler(async (req, res) => {
-  const { title, description, category, mrp } = req.body;
-  const image = req.file ? req.file.path : null;
+  try {
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
 
-  if (!title || !description || !image || !category) {
-    res.status(400);
-    throw new Error("Title, description, image, and category are required");
+    const { title, description, category, mrp } = req.body;
+    const image = req.file ? req.file.path : null;
+
+    if (!title || !description || !image || !category) {
+      res.status(400);
+      throw new Error("Title, description, image, and category are required");
+    }
+
+    const product = new Product({
+      title,
+      description,
+      image,
+      category,
+      mrp,
+    });
+
+    const createdProduct = await product.save();
+
+    res.status(201).json(createdProduct);
+
+  } catch (error) {
+    console.log("CREATE PRODUCT ERROR:", error);
+
+    res.status(500).json({
+      message: error.message,
+    });
   }
-
-  const product = new Product({ title, description, image, category, mrp });
-  const createdProduct = await product.save();
-  res.status(201).json(createdProduct);
 });
 
 // Update product
