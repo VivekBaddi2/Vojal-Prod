@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FaWhatsapp, FaFacebook, FaInstagram } from "react-icons/fa";
 
 const WHATSAPP = `https://wa.me/${import.meta.env.VITE_WHATSAPP_NUMBER}`;
 const INSTAGRAM =
@@ -270,17 +271,17 @@ export default function Footer() {
                   {
                     href: WHATSAPP,
                     bg: "#25D366",
-                    icon: "W",
+                    icon: <FaWhatsapp />,
                   },
                   {
                     href: INSTAGRAM,
                     bg: "linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)",
-                    icon: "I",
+                    icon: <FaInstagram />,
                   },
                   {
                     href: FACEBOOK,
                     bg: "#1877F2",
-                    icon: "F",
+                    icon: <FaFacebook />,
                   },
                 ].map((social, i) => (
                   <a

@@ -277,16 +277,16 @@ export default function Home() {
         {/* Subtle grid */}
         <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px)", backgroundSize: "64px 64px" }} />
 
-        <div className="relative text-center px-6 max-w-4xl mx-auto space-y-8">
+        <div className="relative text-center px-6 max-w-4xl mx-auto space-y-6 md:space-y-8">
           {/* Eyebrow */}
           <motion.div
   initial={{ opacity: 0, y: 16 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.6 }}
-  className="flex items-center justify-center gap-5"
+  className="flex items-center justify-center gap-2 md:gap-5"
 >
   <div className="h-px w-20 sm:w-28" style={{ background: "linear-gradient(90deg, transparent, #C9A84C)" }} />
-  <p className="text-xl sm:text-3xl tracking-[0.25em] uppercase font-semibold" style={{ color: "#C9A84C" }}>
+  <p className="text-md sm:text-xl tracking-[0.25em] uppercase font-semibold" style={{ color: "#C9A84C" }}>
     Vojal Engineering
   </p>
   <div className="h-px w-20 sm:w-28" style={{ background: "linear-gradient(90deg, #C9A84C, transparent)" }} />
@@ -297,8 +297,8 @@ export default function Home() {
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="text-white leading-[1.05]"
-            style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(3rem, 8vw, 5.5rem)", fontWeight: 700, letterSpacing: "-0.02em" }}
+            className="text-white leading-[1.05] text-4xl md:text-7xl lg:text-[80px]"
+            style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, letterSpacing: "-0.02em" }}
           >
             Crafted for{" "}
             <em style={{ color: "#C9A84C", fontStyle: "italic" }}>Excellence,</em>
@@ -311,7 +311,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.28 }}
-            className="text-white/55 text-base max-w-lg mx-auto leading-relaxed"
+            className="text-white/55 text-base md:text-lg max-w-lg mx-auto leading-relaxed"
           >
             Premium water taps, shower heads &amp; plumbing accessories trusted by professionals across India.
           </motion.p>
