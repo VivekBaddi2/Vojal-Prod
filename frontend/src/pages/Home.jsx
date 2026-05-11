@@ -423,34 +423,16 @@ export default function Home() {
           <InfiniteMarquee
             items={products}
             direction="left"
-            renderItem={(p, i) => (
-              <motion.div
-                whileHover={{ y: -6 }}
-                onClick={() => setSelectedProduct(p)}
-                className="prod-card w-[230px] bg-white rounded-2xl overflow-hidden cursor-pointer group"
-                style={{ border: "1px solid #f0eadb", boxShadow: "0 2px 16px rgba(58,15,69,0.07)", transition: "box-shadow 0.3s ease, border-color 0.3s ease" }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = "0 10px 32px rgba(123,31,138,0.18)"; e.currentTarget.style.borderColor = "#C9A84C"; }}
-                onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 2px 16px rgba(58,15,69,0.07)"; e.currentTarget.style.borderColor = "#f0eadb"; }}
-              >
-                <div className="relative overflow-hidden" style={{ height: "175px" }}>
-                  <img src={`${p.image}`} alt={p.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center" style={{ background: "rgba(42,10,53,0.42)" }}>
-                    <span className="text-white text-[10px] font-semibold tracking-widest uppercase px-4 py-2 rounded-full" style={{ background: "rgba(123,31,138,0.78)", border: "1px solid rgba(255,255,255,0.3)" }}>View Details</span>
-                  </div>
-                  {/* Gold bottom line on hover */}
-                  <div className="gold-line absolute bottom-0 left-0 h-[3px]" style={{ background: "linear-gradient(90deg, #C9A84C, #e8c96a)" }} />
-                </div>
-                <div className="p-4">
-                  <span className="text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full" style={{ background: "#f3e8fa", color: "#7B1F8A" }}>{p.category}</span>
-                  <h3 className="font-semibold text-[#3a0f45] mt-2 truncate" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1rem" }}>{p.title}</h3>
-                  <p className="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">{p.description}</p>
-                  <div className="mt-3 flex items-center justify-end gap-1 text-xs font-semibold" style={{ color: "#C9A84C" }}>
-                    Enquire
-                    <svg className="w-3 h-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
-                  </div>
-                </div>
-              </motion.div>
-            )}
+       renderItem={(p, i) => (
+  <div
+    className="w-[230px] rounded-2xl overflow-hidden"
+    style={{ border: "1px solid #f0eadb", boxShadow: "0 2px 16px rgba(58,15,69,0.07)", background: "#faf7fc" }}
+  >
+    <div style={{ height: "175px" }}>
+      <img src={`${p.image}`} alt={p.title} className="w-full h-full object-contain" />
+    </div>
+  </div>
+)}
           />
         )}
       </section>
@@ -537,17 +519,12 @@ export default function Home() {
               direction="left"
               renderItem={(g, i) => (
                 <div
-                  className="w-[265px] rounded-2xl overflow-hidden group"
+                className="w-[220px] rounded-2xl"
                   style={{ border: "1px solid #f0eadb", boxShadow: "0 2px 14px rgba(58,15,69,0.07)" }}
                 >
-                  <div className="relative overflow-hidden" style={{ height: "195px" }}>
-                    <img
-                      src={`${g.image}`}
-                      alt={g.title || "Gallery"}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
-                    />
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "rgba(42,10,53,0.28)" }} />
-                  </div>
+               <div className="relative rounded-2xl" style={{ background: "#faf7fc", height: "160px" }}>
+  <img src={`${g.image}`} alt={g.title || "Gallery"} className="w-full h-full object-contain" />
+</div>
                 </div>
               )}
             />
@@ -561,17 +538,12 @@ export default function Home() {
             direction="right"
             renderItem={(g, i) => (
               <div
-                className="w-[220px] rounded-2xl overflow-hidden group"
+                className="w-[220px] rounded-2xl"
                 style={{ border: "1px solid #f0eadb", boxShadow: "0 2px 14px rgba(58,15,69,0.07)" }}
               >
-                <div className="relative overflow-hidden" style={{ height: "160px" }}>
-                  <img
-                    src={`${g.image}`}
-                    alt={g.title || "Gallery"}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "rgba(42,10,53,0.28)" }} />
-                </div>
+    <div className="relative rounded-2xl" style={{ background: "#faf7fc", height: "160px" }}>
+  <img src={`${g.image}`} alt={g.title || "Gallery"} className="w-full h-full object-contain" />
+</div>
               </div>
             )}
           />

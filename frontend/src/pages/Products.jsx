@@ -1,5 +1,5 @@
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -15,7 +15,102 @@ const WAIcon = () => (
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
   </svg>
 );
+// ─── Zoom Image ────────────────────────────────────────────────────────────────
+function ZoomImage({ src, alt }) {
+  const [scale, setScale] = useState(1);
+  const [origin, setOrigin] = useState({ x: 50, y: 50 });
+  const [dragging, setDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const containerRef = useRef(null);
 
+  const handleClick = (e) => {
+    if (dragging) return;
+    if (scale !== 1) {
+      setScale(1);
+      setOrigin({ x: 50, y: 50 });
+      setDragOffset({ x: 0, y: 0 });
+      return;
+    }
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setOrigin({ x, y });
+    setScale(2.5);
+  };
+
+  const handleMouseDown = (e) => {
+    if (scale === 1) return;
+    e.preventDefault();
+    setDragging(false);
+    setDragStart({ x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y });
+  };
+
+  const handleMouseMove = (e) => {
+    if (scale === 1) return;
+    if (e.buttons !== 1) return;
+    setDragging(true);
+    setDragOffset({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y,
+    });
+  };
+
+  const handleMouseUp = () => {
+    setTimeout(() => setDragging(false), 10);
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        overflow: "hidden",
+        cursor: scale === 1 ? "zoom-in" : "zoom-out",
+        position: "relative",
+      }}
+      onClick={handleClick}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+    >
+      <img
+        src={src}
+        alt={alt}
+        draggable={false}
+      style={{
+  width: "100%",
+  height: "300px",
+  objectFit: "contain",
+  display: "block",
+          transform: `scale(${scale}) translate(${dragOffset.x / scale}px, ${dragOffset.y / scale}px)`,
+          transformOrigin: `${origin.x}% ${origin.y}%`,
+          transition: dragging ? "none" : "transform 0.4s ease",
+          userSelect: "none",
+        }}
+      />
+      {scale === 1 && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: 10,
+            right: 10,
+            background: "rgba(58,15,69,0.65)",
+            color: "white",
+            fontSize: 10,
+            fontWeight: 600,
+            padding: "3px 8px",
+            borderRadius: 20,
+            backdropFilter: "blur(4px)",
+            pointerEvents: "none",
+          }}
+        >
+          Click to zoom
+        </div>
+      )}
+    </div>
+  );
+}
 // ─── Product Card ──────────────────────────────────────────────────────────────
 function ProductCard({ p, index, onClick }) {
   return (
@@ -26,7 +121,7 @@ function ProductCard({ p, index, onClick }) {
       transition={{ duration: 0.55, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -6 }}
       onClick={() => onClick(p)}
-      className="group relative bg-white rounded-2xl overflow-hidden cursor-pointer flex flex-col"
+className="group relative bg-white rounded-2xl cursor-pointer flex flex-col"
       style={{
         boxShadow: "0 1px 3px rgba(58,15,69,0.08), 0 6px 24px rgba(58,15,69,0.05)",
         border: "1px solid #f0eadb",
@@ -34,12 +129,13 @@ function ProductCard({ p, index, onClick }) {
       }}
     >
       {/* Image */}
-      <div className="relative overflow-hidden" style={{ height: "220px" }}>
-        <img
-          src={`${p.image}`}
-          alt={p.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-        />
+
+<div className="relative overflow-hidden rounded-t-2xl" style={{ height: "240px", background: "#faf7fc" }}>
+  <img
+    src={`${p.image}`}
+    alt={p.title}
+    className="w-full h-full object-contain p-2"
+  />
         {/* Overlay */}
         <div
           className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -146,20 +242,17 @@ function ProductModal({ product, onClose, onWhatsApp, isLoading }) {
           <div className="overflow-y-auto flex-1 overscroll-contain" style={{ WebkitOverflowScrolling: "touch" }}>
 
             {/* Hero image */}
-            <div className="relative" style={{ height: "260px", flexShrink: 0 }}>
-              <img
-                src={`${product.image}`}
-                alt={product.title}
-                className="w-full h-full object-cover"
-              />
-              {/* Gradient overlay */}
-              <div
-                className="absolute inset-0"
-                style={{ background: "linear-gradient(to top, rgba(58,15,69,0.7) 0%, transparent 55%)" }}
-              />
+<div className="relative overflow-hidden" style={{ background: "#faf7fc", flexShrink: 0, height: "300px" }}>
+  <ZoomImage src={product.image} alt={product.title} />
+            
+             {/* Gradient overlay */}
+<div
+  className="absolute inset-0 pointer-events-none"
+  style={{ background: "linear-gradient(to top, rgba(58,15,69,0.7) 0%, transparent 55%)" }}
+/>
               {/* Category pill on image */}
-              <div
-                className="absolute bottom-4 left-4 text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full"
+<div
+  className="absolute bottom-4 left-4 text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full pointer-events-none"
                 style={{ background: "rgba(201,168,76,0.92)", color: "#2a0a35" }}
               >
                 {product.category}
@@ -486,7 +579,7 @@ const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)
           style={{ borderBottom: "1px solid #f0eadb", boxShadow: "0 2px 12px rgba(58,15,69,0.06)" }}
         >
           <div className="max-w-6xl mx-auto px-6 py-3">
-            <div className="filter-bar flex gap-2 overflow-x-auto">
+            <div className="filter-bar flex gap-2 flex-wrap">
               {categories.map((cat) => (
                 <button
                   key={cat}
