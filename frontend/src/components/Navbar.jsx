@@ -17,10 +17,7 @@ export default function Navbar() {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 24);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -29,7 +26,6 @@ export default function Navbar() {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
-
         .nav-link {
           position: relative;
           font-size: 14px;
@@ -40,7 +36,6 @@ export default function Navbar() {
           padding: 8px 0;
           transition: all 0.3s ease;
         }
-
         .nav-link::after {
           content: '';
           position: absolute;
@@ -53,21 +48,9 @@ export default function Navbar() {
           background: linear-gradient(90deg, #C9A84C, #7B1F8A);
           transition: width 0.3s ease;
         }
-
-        .nav-link:hover {
-          color: #7B1F8A;
-        }
-
-        .nav-link:hover::after,
-        .nav-link.active::after {
-          width: 100%;
-        }
-
-        .nav-link.active {
-          color: #7B1F8A;
-          font-weight: 600;
-        }
-
+        .nav-link:hover { color: #7B1F8A; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link.active { color: #7B1F8A; font-weight: 600; }
         .mobile-link {
           width: 100%;
           text-align: center;
@@ -78,75 +61,93 @@ export default function Navbar() {
           font-weight: 500;
           color: #4b5563;
         }
-
-        .mobile-link:hover,
-        .mobile-link.active {
-          background: #f8f1fc;
-          color: #7B1F8A;
-        }
-
+        .mobile-link:hover, .mobile-link.active { background: #f8f1fc; color: #7B1F8A; }
         .cta-btn {
           background: linear-gradient(135deg, #7B1F8A, #9b30ae);
           box-shadow: 0 8px 24px rgba(123,31,138,0.22);
           transition: all 0.3s ease;
         }
-
-        .cta-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 28px rgba(123,31,138,0.30);
-        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(123,31,138,0.30); }
       `}</style>
 
       <nav
-        className="fixed top-0 left-0 w-full z-50 transition-all duration-300"
         style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          zIndex: 50,
           fontFamily: "'DM Sans', sans-serif",
           background: scrolled ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.82)",
           backdropFilter: "blur(16px)",
-          borderBottom: scrolled
-            ? "1px solid rgba(201,168,76,0.15)"
-            : "1px solid rgba(238,228,201,0.6)",
-          boxShadow: scrolled
-            ? "0 8px 30px rgba(0,0,0,0.06)"
-            : "0 4px 20px rgba(0,0,0,0.03)",
+          borderBottom: scrolled ? "1px solid rgba(201,168,76,0.15)" : "1px solid rgba(238,228,201,0.6)",
+          boxShadow: scrolled ? "0 8px 30px rgba(0,0,0,0.06)" : "0 4px 20px rgba(0,0,0,0.03)",
+          transition: "all 0.3s ease",
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex justify-between items-center">
+        <div
+          style={{
+            maxWidth: "80rem",
+            margin: "0 auto",
+            padding: "0 1.5rem",
+            height: "5rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           {/* Logo */}
-          <NavLink to="/" className="flex items-center gap-3">
+          <NavLink
+            to="/"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              textDecoration: "none",
+              flexShrink: 0,
+            }}
+          >
             <img
               src={logo}
               alt="Vojal Engineering"
-              className="h-12 lg:h-14 w-auto object-contain"
+              style={{ height: "42px", width: "auto", objectFit: "contain", flexShrink: 0 }}
             />
-
-            <div className="hidden md:block mt-2">
-              <h2
+            <div style={{ flexShrink: 0 }}>
+              <div
                 style={{
                   fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "1.45rem",
                   fontWeight: 700,
                   color: "#3a0f45",
                   lineHeight: 1,
+                  fontSize: "1.2rem",
+                  whiteSpace: "nowrap",
                 }}
               >
                 VOJAL
-              </h2>
-              <p className="text-[10px] tracking-[0.18em] uppercase text-[#C9A84C] font-semibold mt-0.5">
+              </div>
+              <div
+                style={{
+                  fontSize: "9px",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "#C9A84C",
+                  fontWeight: 600,
+                  marginTop: "2px",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 Engineering
-              </p>
+              </div>
             </div>
           </NavLink>
 
           {/* Desktop Nav */}
-          <ul className="hidden lg:flex items-center gap-10 list-none m-0 p-0">
+          <ul style={{ display: "none" }} className="lg-flex-nav">
             {navItems.map((item) => (
-              <li key={item.path}>
+              <li key={item.path} style={{ listStyle: "none" }}>
                 <NavLink
                   to={item.path}
-                  className={({ isActive }) =>
-                    `nav-link${isActive ? " active" : ""}`
-                  }
+                  className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
                 >
                   {item.label}
                 </NavLink>
@@ -155,10 +156,18 @@ export default function Navbar() {
           </ul>
 
           {/* Desktop CTA */}
-          <div className="hidden lg:flex items-center">
+          <div style={{ display: "none" }} className="lg-flex-cta">
             <NavLink
               to="/contact"
-              className="cta-btn text-white text-sm font-semibold px-6 py-3 rounded-full"
+              className="cta-btn"
+              style={{
+                color: "white",
+                fontSize: "14px",
+                fontWeight: 600,
+                padding: "12px 24px",
+                borderRadius: "9999px",
+                textDecoration: "none",
+              }}
             >
               Get in Touch
             </NavLink>
@@ -167,24 +176,25 @@ export default function Navbar() {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 focus:outline-none relative z-50"
+            style={{ background: "none", border: "none", cursor: "pointer", padding: "8px" }}
+            className="lg-hidden-btn"
           >
-            <div className="flex flex-col gap-1.5">
-              <span
-                className={`block w-6 h-0.5 bg-[#3a0f45] rounded transition-all duration-300 ${
-                  isOpen ? "rotate-45 translate-y-2" : ""
-                }`}
-              />
-              <span
-                className={`block w-6 h-0.5 bg-[#3a0f45] rounded transition-all duration-300 ${
-                  isOpen ? "opacity-0" : ""
-                }`}
-              />
-              <span
-                className={`block w-6 h-0.5 bg-[#3a0f45] rounded transition-all duration-300 ${
-                  isOpen ? "-rotate-45 -translate-y-2" : ""
-                }`}
-              />
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+              <span style={{
+                display: "block", width: "24px", height: "2px", background: "#3a0f45",
+                borderRadius: "2px", transition: "all 0.3s",
+                transform: isOpen ? "rotate(45deg) translateY(8px)" : "none",
+              }} />
+              <span style={{
+                display: "block", width: "24px", height: "2px", background: "#3a0f45",
+                borderRadius: "2px", transition: "all 0.3s",
+                opacity: isOpen ? 0 : 1,
+              }} />
+              <span style={{
+                display: "block", width: "24px", height: "2px", background: "#3a0f45",
+                borderRadius: "2px", transition: "all 0.3s",
+                transform: isOpen ? "rotate(-45deg) translateY(-8px)" : "none",
+              }} />
             </div>
           </button>
         </div>
@@ -197,35 +207,55 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -24 }}
               transition={{ duration: 0.25 }}
-              className="lg:hidden absolute top-20 left-0 w-full px-6 pb-6"
+              style={{
+                position: "absolute",
+                top: "5rem",
+                left: 0,
+                width: "100%",
+                padding: "0 1.5rem 1.5rem",
+              }}
+              className="lg-hidden-menu"
             >
               <div
-                className="rounded-3xl p-6 shadow-2xl"
                 style={{
+                  borderRadius: "24px",
+                  padding: "24px",
+                  boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
                   background: "rgba(255,255,255,0.96)",
                   backdropFilter: "blur(18px)",
                   border: "1px solid rgba(201,168,76,0.14)",
                 }}
               >
-                <div className="flex flex-col gap-2">
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   {navItems.map((item) => (
                     <NavLink
                       key={item.path}
                       to={item.path}
                       onClick={() => setIsOpen(false)}
-                      className={({ isActive }) =>
-                        `mobile-link${isActive ? " active" : ""}`
-                      }
+                      className={({ isActive }) => `mobile-link${isActive ? " active" : ""}`}
+                      style={{ textDecoration: "none" }}
                     >
                       {item.label}
                     </NavLink>
                   ))}
                 </div>
-
                 <NavLink
                   to="/contact"
                   onClick={() => setIsOpen(false)}
-                  className="cta-btn mt-5 w-full text-white text-sm font-semibold py-3 rounded-full flex items-center justify-center"
+                  className="cta-btn"
+                  style={{
+                    marginTop: "20px",
+                    width: "100%",
+                    color: "white",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    padding: "12px",
+                    borderRadius: "9999px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textDecoration: "none",
+                  }}
                 >
                   Get in Touch
                 </NavLink>
@@ -234,6 +264,15 @@ export default function Navbar() {
           )}
         </AnimatePresence>
       </nav>
+
+      <style>{`
+        @media (min-width: 1024px) {
+          .lg-flex-nav { display: flex !important; align-items: center; gap: 40px; padding: 0; margin: 0; }
+          .lg-flex-cta { display: flex !important; align-items: center; }
+          .lg-hidden-btn { display: none !important; }
+          .lg-hidden-menu { display: none !important; }
+        }
+      `}</style>
     </>
   );
 }
